@@ -1,0 +1,18 @@
+name: CI
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  tests_2020:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run tests
+        uses: nzbr/vlang-action@v2
+        with:
+          file: "2020"
+          args: "-stats test"
