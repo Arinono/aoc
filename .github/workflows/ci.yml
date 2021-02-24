@@ -11,6 +11,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Lint
+        uses: nzbr/vlang-action@v2
+        with:
+          file: "2020"
+          args: "fmt -verify"
+
       - name: Run tests
         uses: nzbr/vlang-action@v2
         with:

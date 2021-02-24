@@ -1,0 +1,1 @@
+"*.v": "v fmt -w 2020 && v -stats test 2020"
