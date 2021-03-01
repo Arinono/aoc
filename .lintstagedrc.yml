@@ -1,1 +1,2 @@
-"*.v": "v fmt -w 2020 && v -stats test 2020"
+"/*!(_test).v/": "v fmt -w /"
+"*_test.v": "v -stats test /"
