@@ -124,7 +124,7 @@ fn test_check_byr() {
 
 	for v in nok_values {
 		check_byr(v) or {
-			assert err == 'invalid byr'
+			assert err.str() == 'invalid byr'
 			continue
 		}
 	}
@@ -141,7 +141,7 @@ fn test_check_iyr() {
 
 	for v in nok_values {
 		check_iyr(v) or {
-			assert err == 'invalid iyr'
+			assert err.str() == 'invalid iyr'
 			continue
 		}
 	}
@@ -158,7 +158,7 @@ fn test_check_eyr() {
 
 	for v in nok_values {
 		check_eyr(v) or {
-			assert err == 'invalid eyr'
+			assert err.str() == 'invalid eyr'
 			continue
 		}
 	}
@@ -174,7 +174,7 @@ fn test_check_hgt() {
 
 	for v in nok_values {
 		check_hgt(v) or {
-			assert err.starts_with('invalid ') == true
+			assert err.str().starts_with('invalid ') == true
 			continue
 		}
 	}
@@ -188,7 +188,7 @@ fn test_check_hcl() {
 
 	for v in nok_values {
 		check_hcl(v) or {
-			assert err == 'invalid hcl'
+			assert err.str() == 'invalid hcl'
 			continue
 		}
 	}
@@ -212,7 +212,7 @@ fn test_check_ecl() {
 	assert ecl_oth == ValidEyeColour{'oth'}
 
 	check_ecl('inv') or {
-		assert err == 'invalid ecl'
+		assert err.str() == 'invalid ecl'
 		return
 	}
 }
@@ -223,7 +223,7 @@ fn test_check_pid() {
 	assert valid_pid == ValidPassportId{'000000001'}
 
 	check_pid('0123456789') or {
-		assert err == 'invalid pid'
+		assert err.str() == 'invalid pid'
 		return
 	}
 }

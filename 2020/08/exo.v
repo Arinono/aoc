@@ -119,7 +119,7 @@ fn main() {
 	ops := parse_input(input)
 
 	mut res_1 := ''
-	ops.run_program() or { res_1 = err.all_after('Broke out of infinite loop at ') }
+	ops.run_program() or { res_1 = err.str().all_after('Broke out of infinite loop at ') }
 	res_2 := ops.fix_and_run_program()
 
 	println('Results:
