@@ -122,6 +122,7 @@ struct Boat {
 mut:
 	pos Pos     = Pos{0, 0}
 	dir BoatDir = .east
+	wp  Pos     = Pos{10, 1}
 }
 
 fn new_boat() Boat {
@@ -129,15 +130,7 @@ fn new_boat() Boat {
 }
 
 fn (b Boat) str() string {
-	mut str := '⛴ '
-	match b.dir {
-		.east { str += '→' }
-		.west { str += '←' }
-		.north { str += '↑' }
-		.south { str += '↓' }
-	}
-	str += ' @$b.pos.x:$b.pos.y'
-	return str
+	return '⛴ @$b.pos.x:$b.pos.y'
 }
 
 fn (mut b Boat) move(act Action) {
@@ -216,25 +209,87 @@ fn (mut b Boat) move(act Action) {
 	}
 }
 
+fn (mut b Boat) move_waypoint(act Action) {
+	reverse := fn (mut b Boat) {
+		if b.wp.x >= 0 { b.wp.x = -b.wp.x } else { b.wp.x = int(math.abs(b.wp.x)) }
+		if b.wp.y >= 0 {
+			b.wp.y = -b.wp.y
+		} else {
+			b.wp.y = int(math.abs(b.wp.y))
+		}
+	}
+	turn_le := fn (mut b Boat) {
+		hold_y := b.wp.y
+		b.wp.y = b.wp.x
+		if hold_y >= 0 {
+			b.wp.x = -hold_y
+		} else {
+			b.wp.x = int(math.abs(hold_y))
+		}
+	}
+	turn_ri := fn (mut b Boat) {
+		hold_y := b.wp.y
+		if b.wp.x >= 0 {
+			b.wp.y = -b.wp.x
+		} else {
+			b.wp.y = int(math.abs(b.wp.x))
+		}
+		b.wp.x = hold_y
+	}
+
+	match act {
+		Forward {
+			b.pos.x += act.value * b.wp.x
+			b.pos.y += act.value * b.wp.y
+		}
+		North {
+			b.wp.y += act.value
+		}
+		South {
+			b.wp.y -= act.value
+		}
+		East {
+			b.wp.x += act.value
+		}
+		West {
+			b.wp.x -= act.value
+		}
+		TurnLeft {
+			match act.value {
+				Quart { turn_le(mut b) }
+				Half { reverse(mut b) }
+				Third { turn_ri(mut b) }
+			}
+		}
+		TurnRight {
+			match act.value {
+				Quart { turn_ri(mut b) }
+				Half { reverse(mut b) }
+				Third { turn_le(mut b) }
+			}
+		}
+	}
+}
+
 fn (b Boat) distance() f64 {
 	return math.abs(b.pos.x) + math.abs(b.pos.y)
 }
 
-fn run_all_actions(mut b Boat, acts []Action) {
-	for a in acts {
-		b.move(a)
-	}
-}
-
 fn main() {
 	input := os.read_file('input.txt') or { panic(err) }
+	acts := parse_input(input)
 
 	mut boat := new_boat()
-	run_all_actions(mut boat, parse_input(input))
+	mut boat_2 := new_boat()
+	for a in acts {
+		boat.move(a)
+		boat_2.move_waypoint(a)
+	}
 	distance_1 := boat.distance()
+	distance_2 := boat_2.distance()
 
 	println('Results:
   Puzzle nº1: $distance_1
-  Puzzle nº2: 
+  Puzzle nº2: $distance_2
 	')
 }
