@@ -20,8 +20,11 @@ struct West {
 }
 
 struct Quart {}
+
 struct Half {}
+
 struct Third {}
+
 type Deg = Half | Quart | Third
 
 struct TurnLeft {

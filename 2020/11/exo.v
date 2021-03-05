@@ -3,9 +3,13 @@ module main
 import os
 
 struct Floor {}
+
 struct FreeSeat {}
+
 struct OccupiedSeat {}
+
 struct Debug {}
+
 type Slot = Debug | Floor | FreeSeat | OccupiedSeat
 
 struct Room {

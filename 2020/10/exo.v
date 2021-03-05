@@ -4,8 +4,11 @@ import os
 // import sync
 
 struct Diff1 {}
+
 struct Diff2 {}
+
 struct Diff3 {}
+
 type Diff = Diff1 | Diff2 | Diff3
 
 type Adapter = u16

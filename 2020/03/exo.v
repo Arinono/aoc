@@ -10,9 +10,13 @@ mut:
 }
 
 struct Tree {}
+
 struct Hole {}
+
 struct Hit {}
+
 struct NoHit {}
+
 type Square = Hit | Hole | NoHit | Tree
 
 fn (s Square) str() string {
