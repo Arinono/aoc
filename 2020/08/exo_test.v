@@ -35,7 +35,7 @@ acc +6'
 	ops := parse_input(input)
 
 	ops.run_program() or {
-		assert err.str() == 'Broke out of infinite loop at 5'
+		assert err.msg == 'Broke out of infinite loop at 5'
 		return
 	}
 	assert true == false

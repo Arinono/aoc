@@ -59,7 +59,7 @@ fn test_get() {
 	val := set.get(3) or { panic(err) }
 	assert val == 3
 	set.get(4) or {
-		assert err.str() == 'int not found'
+		assert err.msg == 'int not found'
 		return
 	}
 	assert true == false // should not reach
