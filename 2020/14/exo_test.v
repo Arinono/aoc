@@ -44,3 +44,44 @@ mem[8] = 0'
 
 	assert mem_sum(program) == 165
 }
+
+fn test_gen_all_possibilities_of() {
+	strs := gen_all_possibilities_of('000000000000000000000000000000X1101X', `X`, [`0`, `1`])
+
+	assert strs.len == 4
+	assert '000000000000000000000000000000011010' in strs
+	assert '000000000000000000000000000000011011' in strs
+	assert '000000000000000000000000000000111010' in strs
+	assert '000000000000000000000000000000111011' in strs
+}
+
+fn test_apply_mask_v2() {
+	addrs := apply_mask_v2(42, '000000000000000000000000000000X1001X')
+
+	assert addrs.len == 4
+	assert 26 in addrs
+	assert 27 in addrs
+	assert 58 in addrs
+	assert 59 in addrs
+
+	addrs_2 := apply_mask_v2(26, '00000000000000000000000000000000X0XX')
+
+	assert addrs_2.len == 8
+	assert 16 in addrs_2
+	assert 17 in addrs_2
+	assert 18 in addrs_2
+	assert 19 in addrs_2
+	assert 24 in addrs_2
+	assert 25 in addrs_2
+	assert 26 in addrs_2
+	assert 27 in addrs_2
+}
+
+fn test_mem_sum_v2() {
+	program := 'mask = 000000000000000000000000000000X1001X
+mem[42] = 100
+mask = 00000000000000000000000000000000X0XX
+mem[26] = 1'
+
+	assert mem_sum_v2(program) == 208
+}
