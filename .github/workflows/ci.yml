@@ -4,21 +4,23 @@ on:
   workflow_dispatch:
 
 jobs:
-  tests_2020:
+  tests:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout V
         uses: actions/checkout@v2
-
+        with:
+          repository: vlang/v
+      - name: Build V
+        run: make
+      - name: Checkout aoc
+        uses: actions/checkout@v2
+        with:
+          path: aoc
       - name: Lint
-        uses: nzbr/vlang-action@v2
-        with:
-          file: "2020"
-          args: "fmt -verify"
-
+        run: ./v fmt -verify aoc
       - name: Run tests
-        uses: nzbr/vlang-action@v2
-        with:
-          file: "2020"
-          args: "-stats test"
+        run: ./v test aoc
+      - name: Build
+        run: ./v -prod aoc/aoc.v -o aoc/aoc

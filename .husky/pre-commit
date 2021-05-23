@@ -1,1 +1,2 @@
-pnpx --no-install lint-staged
+pnpx -y lint-staged
+v test .
