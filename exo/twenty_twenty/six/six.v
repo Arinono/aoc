@@ -80,15 +80,20 @@ fn get_group(input string) Group {
 			Passenger{get_runes(input)},
 		]}
 	}
-	return Group{input.split('\n').map(fn (s string) Passenger {
-		return Passenger{get_runes(s)}
-	})}
+
+	mut group := []Passenger{}
+	for s in input.split('\n') {
+		group << Passenger{get_runes(s)}
+	}
+	return Group{group}
 }
 
 fn get_groups(input string) []Group {
-	return input.split('\n\n').map(fn (b string) Group {
-		return get_group(b)
-	})
+	mut groups := []Group{}
+	for b in input.split('\n\n') {
+		groups << get_group(b)
+	}
+	return groups
 }
 
 fn run_puzzle_1(input string) int {

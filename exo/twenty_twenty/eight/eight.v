@@ -89,28 +89,34 @@ fn (ops []Op) fix_and_run_program() int {
 }
 
 fn parse_input(input string) []Op {
-	return input.split('\n').map(fn (l string) Op {
+	mut ops := []Op{}
+
+	for l in input.split('\n') {
 		if l.len == 0 {
-			return Noop(0)
+			ops << Noop(0)
 		}
 		parts := l.split(' ')
-		assert parts.len == 2
+		if parts.len != 2 {
+			continue
+		}
 
 		match parts[0] {
 			'nop' {
-				return Noop(0)
+				ops << Noop(0)
 			}
 			'acc' {
-				return Acc(parts[1].int())
+				ops << Acc(parts[1].int())
 			}
 			'jmp' {
-				return Jmp(parts[1].int())
+				ops << Jmp(parts[1].int())
 			}
 			else {
 				panic('cannot parse parts or line')
 			}
 		}
-	})
+	}
+
+	return ops
 }
 
 fn run_puzzle_1(ops []Op) string {

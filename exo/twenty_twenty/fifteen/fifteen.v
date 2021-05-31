@@ -10,11 +10,12 @@ pub mut:
 fn memory_game(nbs []int, nth int) int {
 	mut mem := map[int]Mem{}
 	mut result := nbs.last()
+	mut i := 1
 
-	for i := 1; i < nbs.len + 1; i++ {
+	for ; i < nbs.len + 1; i++ {
 		mem[nbs[i - 1]] = Mem{i, i, false}
 	}
-	for i := nbs.len + 1; i <= nth; i++ {
+	for ; i <= nth; i++ {
 		nb := mem[result]
 		match nb.already_spoken {
 			false {

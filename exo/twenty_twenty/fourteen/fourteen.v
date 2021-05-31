@@ -91,9 +91,11 @@ fn apply_mask_v2(addr u64, mask string) []u64 {
 		}
 	}
 
-	return gen_all_possibilities_of(m_masked_addr, `X`, [`0`, `1`]).map(fn (str string) u64 {
-		return bin_to_dec(str)
-	})
+	mut possible := []u64{}
+	for str in gen_all_possibilities_of(m_masked_addr, `X`, [`0`, `1`]) {
+		possible << bin_to_dec(str)
+	}
+	return possible
 }
 
 fn mem_sum(input string) u64 {

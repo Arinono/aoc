@@ -50,12 +50,13 @@ fn (r Room) str() string {
 fn (r Room) pad() Room {
 	mut padded_room := r
 
-	for mut l in r.slots {
+	for i, l in padded_room.slots {
 		mut new_l := []Slot{}
 		new_l << Slot(Floor{})
 		new_l << l
 		new_l << Slot(Floor{})
-		l = new_l.clone()
+		padded_room.slots.delete(i)
+		padded_room.slots.insert(i, new_l)
 	}
 
 	pad_row := [Slot(Floor{})].repeat(r.slots[0].len)

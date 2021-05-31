@@ -84,11 +84,13 @@ fn find_highest_seat_uid(passes []ValidBoardingPass) int {
 }
 
 fn find_your_seat(passes []ValidBoardingPass) ?int {
+	mut uids := []int{}
 	mut m_passes := passes.clone()
 	m_passes.sort(a.uid < b.uid)
-	uids := passes.map(fn (p ValidBoardingPass) int {
-		return p.uid
-	})
+
+	for p in passes {
+		uids << p.uid
+	}
 
 	for i in m_passes.first().uid .. m_passes.last().uid {
 		if !(i in uids) {

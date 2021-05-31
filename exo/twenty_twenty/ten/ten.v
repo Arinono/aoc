@@ -105,6 +105,16 @@ fn (mut ac AdapterChain) find_max_arrangements() u64 {
 	return recurse(ac.ordered_adapters, 0, mut memo)
 }
 
+fn sort_adapters(a &u16, b &u16) int {
+	if *a < *b {
+		return -1
+	}
+	if *a > *b {
+		return 1
+	}
+	return 0
+}
+
 fn parse_input(input string) AdapterChain {
 	mut adapters := []Adapter{}
 	lines := input.split('\n')
@@ -112,15 +122,7 @@ fn parse_input(input string) AdapterChain {
 	for l in lines {
 		adapters << l.u16()
 	}
-	adapters.sort_with_compare(fn (a &u16, b &u16) int {
-		if *a < *b {
-			return -1
-		}
-		if *a > *b {
-			return 1
-		}
-		return 0
-	})
+	adapters.sort_with_compare(sort_adapters)
 
 	return AdapterChain{
 		ordered_adapters: adapters

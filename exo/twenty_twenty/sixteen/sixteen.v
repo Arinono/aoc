@@ -163,8 +163,18 @@ fn parse_input(input string) (map[string][]Range, []int, [][]int) {
 	assert parts[2].split('\n').len > 1
 
 	rules := parse_rules(parts[0])
-	your_ticket := parse_ticket(parts[1].split('\n').last())
-	tickets := parse_tickets(parts[2].split('\n')[1..])
+
+	// This splitted lines thing is only to _fix_ the compilation errors when using
+	// -autofree. Since the line was too long, it was doing a C thing to display the line
+	// w/o breaking it (using /).
+	// But then one of the flag triggered a "undeclared error" even if it is.
+	your_ticket_section := parts[1].split('\n')
+	your_ticket_line := your_ticket_section.last()
+	your_ticket := parse_ticket(your_ticket_line)
+
+	tickets_section := parts[2].split('\n')
+	tickets_line := tickets_section[1..]
+	tickets := parse_tickets(tickets_line)
 
 	return rules, your_ticket, tickets
 }

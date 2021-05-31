@@ -24,13 +24,13 @@ fn (data XmasData) find_error() u64 {
 	mut m_preambule := data.preambule
 	mut value_to_test_idx := 0
 
-	check_fn := fn (preambule []u64, value u64) bool {
-		for x in 0 .. preambule.len - 1 {
-			inner: for y in 1 .. preambule.len {
-				if preambule[x] == preambule[y] {
+	check_fn := fn (m_preambule []u64, value u64) bool {
+		for x in 0 .. m_preambule.len - 1 {
+			inner: for y in 1 .. m_preambule.len {
+				if m_preambule[x] == m_preambule[y] {
 					continue inner
 				}
-				if preambule[x] + preambule[y] == value {
+				if m_preambule[x] + m_preambule[y] == value {
 					return true
 				}
 			}
