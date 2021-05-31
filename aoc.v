@@ -174,7 +174,13 @@ fn check_input(sc SupportedCommand) ?CommandFn {
 		}
 		.all {
 			return fn (c Command) ? {
-				return error('not implemented')
+				for _, d in runnables {
+					for _, r in d {
+						if !os.exists(r.file_path) {
+							return error('\n  Unable to find input file at \'$r.file_path\'')
+						}
+					}
+				}
 			}
 		}
 	}
@@ -218,7 +224,13 @@ fn run(sc SupportedCommand) ?CommandFn {
 		}
 		.all {
 			return fn (c Command) ? {
-				return error('not implemented')
+				for y, _ in runnables {
+					println('Running $y ...\n')
+					results := run_multi(runnables[y]) ?
+					for r in results {
+						println(r)
+					}
+				}
 			}
 		}
 	}
@@ -271,6 +283,19 @@ fn year(mut m_cli Command) Command {
 	return m_cli
 }
 
+fn all(mut m_cli Command) Command {
+	mut all := Command{
+		name: 'all'
+		description: 'Run all exercises.'
+		pre_execute: check_input(.all) or { panic(err) }
+		execute: run(.all) or { panic(err) }
+	}
+
+	m_cli.add_command(all)
+
+	return m_cli
+}
+
 fn main() {
 	mut m_cli := Command{
 		name: 'aoc'
@@ -278,7 +303,7 @@ fn main() {
 		version: '0.0.1'
 	}
 
-	setup_cli(mut m_cli, single, year, setup, parse_args)
+	setup_cli(mut m_cli, single, year, all, setup, parse_args)
 }
 
 fn setup(mut m_cmd Command) Command {
@@ -291,9 +316,10 @@ fn parse_args(mut m_cmd Command) Command {
 	return m_cmd
 }
 
-fn setup_cli(mut a Command, ab fn (mut Command) Command, bd fn (mut Command) Command, de fn (mut Command) Command, ef fn (mut Command) Command) Command {
+fn setup_cli(mut a Command, ab fn (mut Command) Command, bd fn (mut Command) Command, de fn (mut Command) Command, ef fn (mut Command) Command, fg fn (mut Command) Command) Command {
 	mut m_ab := ab(mut a)
 	mut m_bd := bd(mut m_ab)
 	mut m_de := de(mut m_bd)
-	return ef(mut m_de)
+	mut m_ef := ef(mut m_de)
+	return fg(mut m_ef)
 }

@@ -27,4 +27,4 @@ jobs:
       - name: Move input files
         run: mv -v aoc/inputs .
       - name: Run
-        run: aoc/aoc year -y 2020
+        run: aoc/aoc all
