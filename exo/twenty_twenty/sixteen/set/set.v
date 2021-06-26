@@ -1,9 +1,8 @@
 module set
 
 pub struct Set<T> {
-mut:
-	val []T
 pub mut:
+	val  []T
 	size u16
 }
 

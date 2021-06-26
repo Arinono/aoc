@@ -153,7 +153,7 @@ fn check_input(sc SupportedCommand) ?CommandFn {
 				if !os.exists(r.file_path) {
 					return error('\n  Unable to find input file at \'$r.file_path\'')
 				}
-				return none
+				return
 			}
 		}
 		.year {
