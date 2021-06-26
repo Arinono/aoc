@@ -2,36 +2,29 @@ module set
 
 pub struct Set<T> {
 pub mut:
-	val  []T
-	size u16
+	values []T
+	size   int
 }
 
 pub fn (s Set<T>) has(v T) bool {
-	for lv in s.val {
-		if lv == v {
-			return true
-		}
-	}
-	return false
+	return v in s.values
 }
 
 pub fn (mut s Set<T>) add(v T) {
 	if !s.has(v) {
-		s.val << v
+		s.values << v
 		s.size++
 	}
 }
 
-pub fn (mut s Set<T>) remove(v T) {
+pub fn (mut s Set<T>) delete(v T) {
 	if s.has(v) {
-		mut tmp_set := new_set<T>()
-		for lv in s.val {
-			if lv != v {
-				tmp_set.add(lv)
+		for i, x in s.values {
+			if x == v {
+				s.values.delete(i)
+				s.size--
 			}
 		}
-		s.val = tmp_set.get_all()
-		s.size = tmp_set.size
 	}
 }
 
@@ -43,7 +36,7 @@ pub fn (s Set<T>) get_at(idx int) ?T {
 		return error('Set: value at index $idx not found.')
 	}
 
-	for i, lv in s.val {
+	for i, lv in s.values {
 		if i == idx {
 			return lv
 		}
@@ -53,11 +46,5 @@ pub fn (s Set<T>) get_at(idx int) ?T {
 }
 
 pub fn (s Set<T>) get_all() []T {
-	return s.val
-}
-
-pub fn new_set<T>() Set<T> {
-	return Set{
-		val: []T{}
-	}
+	return s.values
 }

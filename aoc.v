@@ -18,6 +18,7 @@ import exo.twenty_twenty.thirteen as exo_2020_13
 import exo.twenty_twenty.fourteen as exo_2020_14
 import exo.twenty_twenty.fifteen as exo_2020_15
 import exo.twenty_twenty.sixteen as exo_2020_16
+// import exo.twenty_twenty.seventeen as exo_2020_17
 
 const runnables = map{
 	2020: map{
@@ -117,6 +118,12 @@ const runnables = map{
 			file_path: 'inputs/2020/16.txt'
 			run_fn: exo_2020_16.run
 		}
+		// 17: Runnable{
+		// 	year: 2020
+		// 	day: 17
+		// 	file_path: 'inputs/2020/17.txt'
+		// 	run_fn: exo_2020_17.run
+		// }
 	}
 }
 

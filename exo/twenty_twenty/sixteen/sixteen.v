@@ -1,6 +1,6 @@
 module sixteen
 
-import exo.twenty_twenty.sixteen.set
+import exo.utils.set
 
 struct Range {
 	lo int
@@ -48,7 +48,7 @@ fn find_fields(rules map[string][]Range, tickets [][]int) map[string]int {
 				fields[f] = i
 				cols.delete(i)
 				for _, mut c in cols {
-					c.remove(f)
+					c.delete(f)
 				}
 			}
 		}
