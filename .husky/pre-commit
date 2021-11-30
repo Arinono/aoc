@@ -1,2 +1,0 @@
-pnpx -y lint-staged
-v test .
