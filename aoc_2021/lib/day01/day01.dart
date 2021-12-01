@@ -1,7 +1,5 @@
 class First extends Measurement {
-  final int value;
-
-  First(this.value) : super();
+  First(int value) : super(value);
 
   @override
   String toString() {
@@ -10,9 +8,7 @@ class First extends Measurement {
 }
 
 class Increased extends Measurement {
-  final int value;
-
-  Increased(this.value) : super();
+  Increased(int value) : super(value);
 
   @override
   String toString() {
@@ -21,9 +17,16 @@ class Increased extends Measurement {
 }
 
 class Decreased extends Measurement {
-  final int value;
+  Decreased(int value) : super(value);
 
-  Decreased(this.value) : super();
+  @override
+  String toString() {
+    return value.toString();
+  }
+}
+
+class Unchanged extends Measurement {
+  Unchanged(int value) : super(value);
 
   @override
   String toString() {
@@ -32,7 +35,9 @@ class Decreased extends Measurement {
 }
 
 abstract class Measurement {
-  Measurement();
+  int value;
+
+  Measurement(this.value);
 
   static Measurement firstMeasure(int value) {
     return First(value);
@@ -42,7 +47,11 @@ abstract class Measurement {
     required int previous,
     required int value,
   }) {
-    return previous < value ? Increased(value) : Decreased(value);
+    return previous == value
+        ? Unchanged(value)
+        : previous < value
+            ? Increased(value)
+            : Decreased(value);
   }
 
   First asFirst() {
@@ -78,6 +87,43 @@ class Measurements {
         ),
       );
     }
+  }
+
+  Measurements.classifyByWindow(List<int> values, {int of = 3}) {
+    if (of <= 0) {
+      throw RequestedWindowNegativeException();
+    } else if (of > values.length) {
+      throw RequestedWindowTooLargeException(values.length, of);
+    }
+
+    final int window = of - 1;
+    _measurements = List.empty(growable: true);
+
+    for (var i = window; i < values.length; i++) {
+      if (i == window) {
+        _measurements.add(
+          Measurement.firstMeasure(
+            _sum(
+              values.sublist(i - window, i + 1),
+            ),
+          ),
+        );
+        continue;
+      }
+
+      _measurements.add(
+        Measurement.classify(
+          previous: _measurements.last.value,
+          value: _sum(
+            values.sublist(i - window, i + 1),
+          ),
+        ),
+      );
+    }
+  }
+
+  int _sum(List<int> numbers) {
+    return numbers.reduce((value, element) => value += element);
   }
 
   int get length {
@@ -120,5 +166,26 @@ class Measurements {
     }
 
     return list;
+  }
+}
+
+class RequestedWindowTooLargeException implements Exception {
+  final int max;
+  final int requested;
+
+  RequestedWindowTooLargeException(this.max, this.requested);
+
+  @override
+  String toString() {
+    return 'Requested window is too large. List size is $max but got: $requested';
+  }
+}
+
+class RequestedWindowNegativeException implements Exception {
+  RequestedWindowNegativeException();
+
+  @override
+  String toString() {
+    return 'Requested window must be positive.';
   }
 }
