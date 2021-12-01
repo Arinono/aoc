@@ -45,10 +45,16 @@ class Day01Runner extends DayRunner<List<int>> {
   @override
   void run(List<int> parsedInput) {
     final Measurements measurements = Measurements.classify(parsedInput);
+    final Measurements measurementsByWindow =
+        Measurements.classifyByWindow(parsedInput, of: 3);
 
     print('Day 01:');
     // part 1
     final countIncreased = measurements.filter(increased: true).length;
-    print('  part1: $countIncreased');
+    print('  part 1: $countIncreased');
+    // part 2
+    final countIncreasedByWindow =
+        measurementsByWindow.filter(increased: true).length;
+    print('  part 2: $countIncreasedByWindow');
   }
 }
