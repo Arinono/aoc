@@ -1,4 +1,4 @@
-A simple command-line application.
+# AOC 2021 [![2021](https://github.com/Arinono/aoc/actions/workflows/2021.yml/badge.svg)](https://github.com/Arinono/aoc/actions/workflows/2021.yml)
 
 ```
 # Tests
