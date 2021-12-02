@@ -43,13 +43,19 @@ class Day02Runner extends DayRunner<List<Direction>> {
   }
 
   @override
-  void run(List<Direction> directions) {
+  Future<void> run(List<Direction> directions) async {
     final Submarine submarine = Submarine();
-    submarine.moveMultipleTimes(directions);
+    final Submarine aimedSubmarine = Submarine.withAim();
 
-    print('Day 01:');
+    submarine.moveMultipleTimes(directions);
+    aimedSubmarine.moveMultipleTimes(directions);
+
+    print('Day $day:');
     // part 1
     final submarineProduct = submarine.depth * submarine.horizon;
     print('  part 1: $submarineProduct');
+    // part 2
+    final submarine2Product = aimedSubmarine.depth * aimedSubmarine.horizon;
+    print('  part 1: $submarine2Product');
   }
 }

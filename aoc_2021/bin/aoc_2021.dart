@@ -28,7 +28,7 @@ void main(List<String> arguments) async {
     final DayRunner runner = DayRunnerPicker.pick(args['day']);
     final fileContent = await runner.fetch();
     final parsedContent = runner.parse(fileContent);
-    runner.run(parsedContent);
+    await runner.run(parsedContent);
   } on DayNotFoundException {
     print('Day not found.');
   } catch (e) {
@@ -50,7 +50,7 @@ abstract class DayRunner<T> {
 
   Future<String> fetch();
   T parse(String input);
-  void run(T parsedInput);
+  Future<void> run(T parsedInput);
 }
 
 class DayRunnerPicker {
