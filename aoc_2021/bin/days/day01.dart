@@ -32,7 +32,7 @@ class Day01Runner extends DayRunner<List<int>> {
         continue;
       }
       try {
-        int nb = int.parse(line, radix: 10);
+        final int nb = int.parse(line, radix: 10);
         list.add(nb);
       } catch (e) {
         throw InvariantDayInputException('int', line, e);
