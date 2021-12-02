@@ -13,7 +13,6 @@ void main(List<String> arguments) async {
       abbr: 'd',
       help: 'The day you want to run.',
       valueHelp: '01',
-      mandatory: true,
     );
 
   parser.addFlag(
@@ -25,10 +24,20 @@ void main(List<String> arguments) async {
 
   try {
     final ArgResults args = parser.parse(arguments);
-    final DayRunner runner = DayRunnerPicker.pick(args['day']);
-    final fileContent = await runner.fetch();
-    final parsedContent = runner.parse(fileContent);
-    await runner.run(parsedContent);
+    final DayRunnerPicker dayRunnerPicker = DayRunnerPicker();
+
+    if (args['day'] == null) {
+      for (final DayRunner runner in dayRunnerPicker.all) {
+        final fileContent = await runner.fetch();
+        final parsedContent = runner.parse(fileContent);
+        await runner.run(parsedContent);
+      }
+    } else {
+      final DayRunner runner = dayRunnerPicker.pick(args['day']);
+      final fileContent = await runner.fetch();
+      final parsedContent = runner.parse(fileContent);
+      await runner.run(parsedContent);
+    }
   } on DayNotFoundException {
     print('Day not found.');
   } catch (e) {
@@ -54,20 +63,22 @@ abstract class DayRunner<T> {
 }
 
 class DayRunnerPicker {
-  static DayRunner pick(String day) {
-    final HashMap<String, DayRunner> days = HashMap.fromEntries([
-      MapEntry('1', Day01Runner()),
-      MapEntry('01', Day01Runner()),
-      MapEntry('2', Day02Runner()),
-      MapEntry('02', Day02Runner()),
-    ]);
+  final HashMap<String, DayRunner> days = HashMap.fromEntries([
+    MapEntry('01', Day01Runner()),
+    MapEntry('02', Day02Runner()),
+  ]);
 
+  DayRunner pick(String day) {
     final runner = days[day];
 
     if (runner != null) {
       return runner;
     }
     throw DayNotFoundException();
+  }
+
+  List<DayRunner> get all {
+    return List.from(days.values);
   }
 }
 
