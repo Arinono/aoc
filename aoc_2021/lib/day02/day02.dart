@@ -15,9 +15,19 @@ class Forward extends Direction {
   Forward(int by) : super(by);
 
   @override
-  UnderwaterPosition moveFrom(UnderwaterPosition start) {
+  UnderwaterPosition move({
+    required UnderwaterPosition start,
+    int? towards,
+  }) {
+    final int depth =
+        towards != null ? start.depth + towards * by : start.depth;
+
+    if (depth < 0) {
+      throw SubmarineCannotFlyException();
+    }
+
     return UnderwaterPosition.from(
-      depth: start.depth,
+      depth: depth,
       horizon: start.horizon + by,
     );
   }
@@ -27,15 +37,23 @@ class Up extends Direction {
   Up(int by) : super(by);
 
   @override
-  UnderwaterPosition moveFrom(UnderwaterPosition start) {
-    if (start.depth - by < 0) {
-      throw SubmarineCannotFlyException();
-    }
+  UnderwaterPosition move({
+    required UnderwaterPosition start,
+    int? towards,
+  }) {
+    if (towards != null) {
+      return UnderwaterPosition.from(
+          horizon: start.horizon, depth: start.depth);
+    } else {
+      if (start.depth - by < 0) {
+        throw SubmarineCannotFlyException();
+      }
 
-    return UnderwaterPosition.from(
-      depth: start.depth - by,
-      horizon: start.horizon,
-    );
+      return UnderwaterPosition.from(
+        depth: start.depth - by,
+        horizon: start.horizon,
+      );
+    }
   }
 }
 
@@ -43,11 +61,16 @@ class Down extends Direction {
   Down(int by) : super(by);
 
   @override
-  UnderwaterPosition moveFrom(UnderwaterPosition start) {
-    return UnderwaterPosition.from(
-      depth: start.depth + by,
-      horizon: start.horizon,
-    );
+  UnderwaterPosition move({
+    required UnderwaterPosition start,
+    int? towards,
+  }) {
+    return towards != null
+        ? UnderwaterPosition.from(horizon: start.horizon, depth: start.depth)
+        : UnderwaterPosition.from(
+            depth: start.depth + by,
+            horizon: start.horizon,
+          );
   }
 }
 
@@ -55,7 +78,10 @@ abstract class Direction {
   final int by;
   Direction(this.by);
 
-  UnderwaterPosition moveFrom(UnderwaterPosition start);
+  UnderwaterPosition move({
+    required UnderwaterPosition start,
+    int towards,
+  });
 
   factory Direction.from(String op) {
     final opL = op.split(' ');
@@ -83,10 +109,42 @@ abstract class Direction {
 
 class Submarine {
   UnderwaterPosition _pos = UnderwaterPosition();
+  int _aim = 0;
+  late final bool _aimEnabled;
+
+  Submarine() {
+    _aimEnabled = false;
+  }
+  Submarine.withAim() {
+    _aimEnabled = true;
+  }
+  Submarine.from({
+    bool aimEnabled = false,
+    int depth = 0,
+    int horizon = 0,
+    int aim = 0,
+  }) {
+    _aimEnabled = aimEnabled;
+    _aim = aim;
+    _pos = UnderwaterPosition.from(depth: depth, horizon: horizon);
+  }
 
   void move(Direction direction) {
+    if (_aimEnabled) {
+      switch (direction.runtimeType) {
+        case Up:
+          _aim -= direction.by;
+          break;
+        case Down:
+          _aim += direction.by;
+          break;
+      }
+    }
+
     try {
-      _pos = direction.moveFrom(_pos);
+      _pos = _aimEnabled
+          ? direction.move(start: _pos, towards: aim)
+          : direction.move(start: _pos);
     } on SubmarineCannotFlyException {
       rethrow;
     }
@@ -106,9 +164,16 @@ class Submarine {
     return _pos.horizon;
   }
 
+  int get aim {
+    if (_aimEnabled) {
+      return _aim;
+    }
+    throw SubmarineAimNotEnabledException();
+  }
+
   @override
   String toString() {
-    return '$horizon:$depth';
+    return _aimEnabled ? '->$aim:$horizon:$depth' : '$horizon:$depth';
   }
 }
 
@@ -118,4 +183,8 @@ class SubmarineCannotFlyException implements Exception {
 
 class SubmarineOperationFormatException implements Exception {
   SubmarineOperationFormatException();
+}
+
+class SubmarineAimNotEnabledException implements Exception {
+  SubmarineAimNotEnabledException();
 }
