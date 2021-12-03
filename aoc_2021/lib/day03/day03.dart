@@ -1,3 +1,10 @@
+class Pair<T, U> {
+  late final T left;
+  late final U right;
+
+  Pair(this.left, this.right);
+}
+
 enum Bit { zero, one }
 
 class Byte {
@@ -33,6 +40,8 @@ class Byte {
 class Mem {
   late final List<Byte> bytes;
 
+  Mem(this.bytes);
+
   Mem.from(List<List<int>> values) {
     bytes = List.empty(growable: true);
     for (final value in values) {
@@ -66,31 +75,130 @@ class Mem {
   }
 }
 
+typedef OxygenGeneratorCandidates = List<Byte>;
+typedef DiOxyScrubberCandidates = List<Byte>;
+
 class Rates {
   late final Byte gamma;
   late final Byte epsilon;
+  late final Byte oxyGenerator;
+  late final Byte diOxyScrubber;
 
-  Rates.fromBytes(Mem bytes) {
+  Rates.fromBytes(Mem mem) {
     final List<Bit> gammaValues = List.empty(growable: true);
     final List<Bit> epsilonValues = List.empty(growable: true);
+    Pair<OxygenGeneratorCandidates, DiOxyScrubberCandidates> candidates = Pair(
+      mem.bytes.toList(),
+      mem.bytes.toList(),
+    );
 
-    for (int i = 0; i < bytes.byteSize; i++) {
-      final List<Bit> bits = bytes.collectBits(offset: i);
-      int ones = 0;
-      int zeros = 0;
+    for (int bitCriterionOffset = 0;
+        bitCriterionOffset < mem.byteSize;
+        bitCriterionOffset++) {
+      final List<Bit> bitsAtCriterionOffset =
+          mem.collectBits(offset: bitCriterionOffset);
+      final Pair<int, int> commonBits =
+          _defineCommonBits(bitsAtCriterionOffset);
+      final Bit mostCommon =
+          commonBits.left > commonBits.right ? Bit.zero : Bit.one;
+      final Bit leastCommon =
+          commonBits.left < commonBits.right ? Bit.zero : Bit.one;
 
-      for (final bit in bits) {
-        if (bit == Bit.zero) {
-          zeros++;
-        } else if (bit == Bit.one) {
-          ones++;
+      final List<Bit> bitsAtCriterionOffsetLeftCandidates =
+          Mem(candidates.left).collectBits(offset: bitCriterionOffset);
+      final Pair<int, int> commonBitsLeftCandidates =
+          _defineCommonBits(bitsAtCriterionOffsetLeftCandidates);
+      final Bit mostCommonLeftCandidates =
+          commonBitsLeftCandidates.right >= commonBitsLeftCandidates.left
+              ? Bit.one
+              : Bit.zero;
+
+      final List<Bit> bitsAtCriterionOffsetRightCandidates =
+          Mem(candidates.right).collectBits(offset: bitCriterionOffset);
+      final Pair<int, int> commonBitsRightCandidates =
+          _defineCommonBits(bitsAtCriterionOffsetRightCandidates);
+      final Bit leastCommonRightCandidates =
+          commonBitsRightCandidates.right >= commonBitsRightCandidates.left
+              ? Bit.zero
+              : Bit.one;
+
+      for (final byte in mem.bytes) {
+        if (candidates.left.length > 1 &&
+            byte.bits.elementAt(bitCriterionOffset) !=
+                mostCommonLeftCandidates) {
+          candidates.left.remove(byte);
+        }
+        if (candidates.right.length > 1 &&
+            byte.bits.elementAt(bitCriterionOffset) !=
+                leastCommonRightCandidates) {
+          candidates.right.remove(byte);
         }
       }
-      gammaValues.add(zeros > ones ? Bit.zero : Bit.one);
-      epsilonValues.add(zeros < ones ? Bit.zero : Bit.one);
+
+      // for (final byte in mem.bytes) {
+      //   _discardCandidates(
+      //     candidates.left,
+      //     byte,
+      //     bitCriterionOffset,
+      //     most: true,
+      //   );
+      //   _discardCandidates(
+      //     candidates.right,
+      //     byte,
+      //     bitCriterionOffset,
+      //     least: true,
+      //   );
+      // }
+
+      gammaValues.add(mostCommon);
+      epsilonValues.add(leastCommon);
     }
+
     gamma = Byte(gammaValues);
     epsilon = Byte(epsilonValues);
+    oxyGenerator = candidates.left.first;
+    diOxyScrubber = candidates.right.first;
+  }
+
+  // for later refactor idea
+  // void _discardCandidates(
+  //   List<Byte> candidates,
+  //   Byte byte,
+  //   int offset, {
+  //   bool most = false,
+  //   bool least = false,
+  // }) {
+  //   final List<Bit> bitsAtCriterionOffset =
+  //       Mem(candidates).collectBits(offset: offset);
+  //   final Pair<int, int> commonBits = _defineCommonBits(bitsAtCriterionOffset);
+  //   final Bit mostCommon =
+  //       commonBits.right >= commonBits.left ? Bit.one : Bit.zero;
+  //   final Bit leastCommon =
+  //       commonBits.right >= commonBits.left ? Bit.zero : Bit.one;
+
+  //   final bool shouldDeleteLeft =
+  //       most && byte.bits.elementAt(offset) != mostCommon;
+  //   final bool shouldDeleteRight =
+  //       least && byte.bits.elementAt(offset) != leastCommon;
+
+  //   if (candidates.length > 1 && (shouldDeleteLeft || shouldDeleteRight)) {
+  //     candidates.remove(byte);
+  //   }
+  // }
+
+  Pair<int, int> _defineCommonBits(List<Bit> bits) {
+    int zeros = 0;
+    int ones = 0;
+
+    for (final bit in bits) {
+      if (bit == Bit.zero) {
+        zeros++;
+      } else if (bit == Bit.one) {
+        ones++;
+      }
+    }
+
+    return Pair(zeros, ones);
   }
 }
 

@@ -51,5 +51,8 @@ class Day03Runner extends DayRunner<List<String>> {
         diag.rates.epsilon.toDec() * diag.rates.gamma.toDec();
     print('  part 1: $powerConsumption');
     // part 2
+    final lifeSupportRate =
+        diag.rates.oxyGenerator.toDec() * diag.rates.diOxyScrubber.toDec();
+    print('  part 2: $lifeSupportRate');
   }
 }
