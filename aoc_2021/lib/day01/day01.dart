@@ -70,33 +70,14 @@ abstract class Measurement {
 class Measurements {
   late final List<Measurement> _measurements;
 
-  Measurements.classify(List<int> values) {
-    _measurements = List.empty(growable: true);
-    for (var i = 0; i < values.length; i++) {
-      if (i == 0) {
-        _measurements.add(
-          Measurement.firstMeasure(values.elementAt(i)),
-        );
-        continue;
-      }
-
-      _measurements.add(
-        Measurement.classify(
-          previous: values.elementAt(i - 1),
-          value: values.elementAt(i),
-        ),
-      );
-    }
-  }
-
-  Measurements.classifyByWindow(List<int> values, {int of = 3}) {
-    if (of <= 0) {
+  Measurements.classify(List<int> values, {int byWindowOf = 1}) {
+    if (byWindowOf <= 0) {
       throw RequestedWindowNegativeException();
-    } else if (of > values.length) {
-      throw RequestedWindowTooLargeException(values.length, of);
+    } else if (byWindowOf > values.length) {
+      throw RequestedWindowTooLargeException(values.length, byWindowOf);
     }
 
-    final int window = of - 1;
+    final int window = byWindowOf - 1;
     _measurements = List.empty(growable: true);
 
     for (var i = window; i < values.length; i++) {
