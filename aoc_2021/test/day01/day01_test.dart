@@ -133,7 +133,7 @@ void main() {
           ]);
 
           // act
-          final measurements = Measurements.classifyByWindow(values, of: 3);
+          final measurements = Measurements.classify(values, byWindowOf: 3);
 
           // assert
           expect(measurements.length, equals(8));

@@ -46,7 +46,7 @@ class Day01Runner extends DayRunner<List<int>> {
   Future<void> run(List<int> parsedInput) async {
     final Measurements measurements = Measurements.classify(parsedInput);
     final Measurements measurementsByWindow =
-        Measurements.classifyByWindow(parsedInput, of: 3);
+        Measurements.classify(parsedInput, byWindowOf: 3);
 
     print('Day $day:');
     // part 1
