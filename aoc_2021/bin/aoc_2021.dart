@@ -5,6 +5,7 @@ import 'package:args/args.dart';
 
 import 'days/day01.dart';
 import 'days/day02.dart';
+import 'days/day03.dart';
 
 void main(List<String> arguments) async {
   final ArgParser parser = ArgParser()
@@ -66,6 +67,7 @@ class DayRunnerPicker {
   final HashMap<String, DayRunner> days = HashMap.fromEntries([
     MapEntry('01', Day01Runner()),
     MapEntry('02', Day02Runner()),
+    MapEntry('03', Day03Runner()),
   ]);
 
   DayRunner pick(String day) {
