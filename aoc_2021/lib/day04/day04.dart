@@ -117,6 +117,7 @@ class Grid {
 class Bingo {
   late final List<int> _numbers;
   late final List<Grid> _grids;
+  final Set<int> _winningGrids = {};
 
   Bingo.fromRaw(String input) {
     final List<String> sections = input.split('\n\n');
@@ -137,10 +138,10 @@ class Bingo {
     }
   }
 
-  int? get _winningGrid {
+  void _findWinningGrids() {
     for (int i = 0; i < _grids.length; i++) {
       if (_grids.elementAt(i).hasWon) {
-        return i;
+        _winningGrids.add(i);
       }
     }
   }
@@ -149,8 +150,21 @@ class Bingo {
     for (final n in _numbers) {
       for (Grid grid in _grids) {
         grid.mark(n);
-        if (_winningGrid != null) {
-          return _winningGrid!;
+        _findWinningGrids();
+        if (_winningGrids.isNotEmpty) {
+          return _winningGrids.first;
+        }
+      }
+    }
+  }
+
+  int? playUntilAllGridsWon() {
+    for (final n in _numbers) {
+      for (Grid grid in _grids) {
+        grid.mark(n);
+        _findWinningGrids();
+        if (_winningGrids.length == _grids.length) {
+          return _winningGrids.last;
         }
       }
     }
