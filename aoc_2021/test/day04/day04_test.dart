@@ -113,8 +113,8 @@ void main() {
           );
         });
       });
-      group('when I play all rounds\n', () {
-        test('some numbers become marked\n', () {
+      group('when I play until a grid wins\n', () {
+        test('I know which will be the first winning grid\n', () {
           // arrange
           final Bingo game = Bingo.fromRaw(testInput);
 
@@ -126,6 +126,23 @@ void main() {
           expect(
             game.grids.elementAt(winningGrid!).score,
             equals(4512),
+          );
+        });
+      });
+
+      group('when I play until all grids have won\n', () {
+        test('I know which will be the first winning grid\n', () {
+          // arrange
+          final Bingo game = Bingo.fromRaw(testInput);
+
+          // act
+          final int? lastWinningGrid = game.playUntilAllGridsWon();
+
+          // assert
+          expect(lastWinningGrid, equals(1));
+          expect(
+            game.grids.elementAt(lastWinningGrid!).score,
+            equals(1924),
           );
         });
       });

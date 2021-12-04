@@ -34,9 +34,13 @@ class Day04Runner extends DayRunner<String> {
 
     final int? winningGridIdx = game.playAll();
     final Grid winningGrid = game.grids.elementAt(winningGridIdx!);
+    final int? lastWinningGridIdx = game.playUntilAllGridsWon();
+    final Grid lastWinningGrid = game.grids.elementAt(lastWinningGridIdx!);
 
     print('Day $day:');
     // part 1
     print('  part 1: ${winningGrid.score}');
+    // part 1
+    print('  part 1: ${lastWinningGrid.score}');
   }
 }
