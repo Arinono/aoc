@@ -7,6 +7,7 @@ import 'days/day01.dart';
 import 'days/day02.dart';
 import 'days/day03.dart';
 import 'days/day04.dart';
+import 'days/day05.dart';
 
 void main(List<String> arguments) async {
   final ArgParser parser = ArgParser()
@@ -70,6 +71,7 @@ class DayRunnerPicker {
     MapEntry('02', Day02Runner()),
     MapEntry('03', Day03Runner()),
     MapEntry('04', Day04Runner()),
+    MapEntry('05', Day05Runner()),
   ]);
 
   DayRunner pick(String day) {
