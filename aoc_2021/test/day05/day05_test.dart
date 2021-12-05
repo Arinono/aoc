@@ -67,7 +67,7 @@ void main() {
     });
 
     group('given I have multiple lines\n', () {
-      group('when I overlap them on a grid\n', () {
+      group('when I overlap the horizontal and vertical lines on a grid\n', () {
         test('I have overlap occurrences\n', () {
           // arrange
           final List<Line> lines =
@@ -82,18 +82,28 @@ void main() {
           expect(grid.at(x: 0, y: 9), equals(2));
           expect(grid.at(x: 1, y: 9), equals(2));
           expect(grid.at(x: 2, y: 9), equals(2));
-        });
 
-        test('I count overlap occurrences\n', () {
+          expect(grid.overlaps, equals(5));
+        });
+      });
+
+      group('when I overlap all of them on a grid\n', () {
+        test('I have overlap occurrences\n', () {
           // arrange
-          final List<Line> lines =
-              testInput.toLines.filterBy(horizontal: true, vertical: true);
+          final List<Line> lines = testInput.toLines;
 
           // act
           final Grid grid = Grid(lines);
 
           // assert
-          expect(grid.overlaps, equals(5));
+          expect(grid.at(x: 7, y: 1), equals(2));
+          expect(grid.at(x: 2, y: 2), equals(2));
+          expect(grid.at(x: 5, y: 3), equals(2));
+          expect(grid.at(x: 7, y: 3), equals(2));
+          expect(grid.at(x: 4, y: 4), equals(3));
+          expect(grid.at(x: 6, y: 4), equals(3));
+
+          expect(grid.overlaps, equals(12));
         });
       });
     });

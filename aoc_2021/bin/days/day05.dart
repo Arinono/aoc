@@ -41,9 +41,12 @@ class Day05Runner extends DayRunner<List<String>> {
 
     final Grid firstGrid =
         Grid(lines.filterBy(horizontal: true, vertical: true));
+    final Grid secondGrid = Grid(lines);
 
     print('Day $day:');
     // part 1
     print('  part 1: ${firstGrid.overlaps}');
+    // part 2
+    print('  part 2: ${secondGrid.overlaps}');
   }
 }

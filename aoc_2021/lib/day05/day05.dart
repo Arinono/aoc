@@ -80,32 +80,84 @@ class ToSouthEastLine extends Line {
   ToSouthEastLine(Point start, Point end) : super(start, end);
 
   @override
-  // TODO: implement point
-  List<Point> get points => throw UnimplementedError();
+  List<Point> get points {
+    List<Point> points = List.empty(growable: true);
+
+    int x = start.x;
+    int y = start.y;
+
+    while (x != end.x + 1 && y != end.y + 1) {
+      points.add(Point(x, y));
+
+      x++;
+      y++;
+    }
+
+    return points;
+  }
 }
 
 class ToSouthWestLine extends Line {
   ToSouthWestLine(Point start, Point end) : super(start, end);
 
   @override
-  // TODO: implement point
-  List<Point> get points => throw UnimplementedError();
+  List<Point> get points {
+    List<Point> points = List.empty(growable: true);
+
+    int x = start.x;
+    int y = start.y;
+
+    while (x != end.x - 1 && y != end.y + 1) {
+      points.add(Point(x, y));
+
+      x--;
+      y++;
+    }
+
+    return points;
+  }
 }
 
 class ToNorthWestLine extends Line {
   ToNorthWestLine(Point start, Point end) : super(start, end);
 
   @override
-  // TODO: implement point
-  List<Point> get points => throw UnimplementedError();
+  List<Point> get points {
+    List<Point> points = List.empty(growable: true);
+
+    int x = start.x;
+    int y = start.y;
+
+    while (x != end.x - 1 && y != end.y - 1) {
+      points.add(Point(x, y));
+
+      x--;
+      y--;
+    }
+
+    return points;
+  }
 }
 
 class ToNorthEastLine extends Line {
   ToNorthEastLine(Point start, Point end) : super(start, end);
 
   @override
-  // TODO: implement point
-  List<Point> get points => throw UnimplementedError();
+  List<Point> get points {
+    List<Point> points = List.empty(growable: true);
+
+    int x = start.x;
+    int y = start.y;
+
+    while (x != end.x + 1 && y != end.y - 1) {
+      points.add(Point(x, y));
+
+      x++;
+      y--;
+    }
+
+    return points;
+  }
 }
 
 abstract class Line {
