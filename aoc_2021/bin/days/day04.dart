@@ -41,6 +41,6 @@ class Day04Runner extends DayRunner<String> {
     // part 1
     print('  part 1: ${winningGrid.score}');
     // part 1
-    print('  part 1: ${lastWinningGrid.score}');
+    print('  part 2: ${lastWinningGrid.score}');
   }
 }

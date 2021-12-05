@@ -1,9 +1,4 @@
-class Pair<T, U> {
-  late final T left;
-  late final U right;
-
-  Pair(this.left, this.right);
-}
+import 'package:aoc_2021/utils/pair.dart';
 
 enum Bit { zero, one }
 
