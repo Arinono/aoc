@@ -28,7 +28,7 @@ class Day06Runner extends DayRunner<List<Fish>> {
     final List<Fish> fishes = List.empty(growable: true);
 
     for (final l in input.split('\n').first.split(',')) {
-      fishes.add(Fish.from(int.parse(l)));
+      fishes.add(int.parse(l));
     }
 
     return fishes;
@@ -36,10 +36,15 @@ class Day06Runner extends DayRunner<List<Fish>> {
 
   @override
   Future<void> run(List<Fish> fishes) async {
-    final List<Fish> finalFishes = fishes.waitFor(80);
+    final int fishesAfter80Days = fishes.waitFor(80);
 
     print('Day $day:');
     // part 1
-    print('  part 1: ${finalFishes.length}');
+    print('  part 1: $fishesAfter80Days');
+
+    final int fishesAfter256Days = fishes.waitFor(256);
+
+    // part 2
+    print('  part 2: $fishesAfter256Days');
   }
 }
