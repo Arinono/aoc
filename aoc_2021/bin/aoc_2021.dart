@@ -10,6 +10,7 @@ import 'days/day04.dart';
 import 'days/day05.dart';
 import 'days/day06.dart';
 import 'days/day07.dart';
+import 'days/day08.dart';
 import 'days/day09.dart';
 import 'days/day10.dart';
 
@@ -78,6 +79,7 @@ class DayRunnerPicker {
     MapEntry('05', Day05Runner()),
     MapEntry('06', Day06Runner()),
     MapEntry('07', Day07Runner()),
+    MapEntry('08', Day08Runner()),
     MapEntry('09', Day09Runner()),
     MapEntry('10', Day10Runner()),
   ]);
