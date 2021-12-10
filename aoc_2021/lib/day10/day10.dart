@@ -33,6 +33,26 @@ abstract class Char {
   final int autocompletePoints;
 
   Char(this.syntaxErrorPoints, this.autocompletePoints);
+
+  factory Char.from(String c) {
+    assert(c.length == 1);
+    switch (c) {
+      case '(':
+      case ')':
+        return Parenthesis();
+      case '[':
+      case ']':
+        return Bracket();
+      case '{':
+      case '}':
+        return Curly();
+      case '<':
+      case '>':
+        return Chevron();
+      default:
+        throw 'unreachable';
+    }
+  }
 }
 
 class Instructions {
@@ -100,55 +120,24 @@ class Instructions {
         throw InvalidStartLineError();
       }
 
-      switch (c) {
-        case '(':
-          _stack.push(Parenthesis());
-          _validClosing = Parenthesis();
-          break;
-        case '[':
-          _stack.push(Bracket());
-          _validClosing = Bracket();
-          break;
-        case '{':
-          _stack.push(Curly());
-          _validClosing = Curly();
-          break;
-        case '<':
-          _stack.push(Chevron());
-          _validClosing = Chevron();
-          break;
-        case ')':
-          if (_validClosing is Parenthesis) {
-            _stack.pop();
-            _validClosing = _stack.top();
-            break;
-          }
-          throw CorruptedLineError(_validClosing!, Parenthesis());
-        case ']':
-          if (_validClosing is Bracket) {
-            _stack.pop();
-            _validClosing = _stack.top();
-            break;
-          }
-          throw CorruptedLineError(_validClosing!, Bracket());
-        case '}':
-          if (_validClosing is Curly) {
-            _stack.pop();
-            _validClosing = _stack.top();
-            break;
-          }
-          throw CorruptedLineError(_validClosing!, Curly());
-        case '>':
-          if (_validClosing is Chevron) {
-            _stack.pop();
-            _validClosing = _stack.top();
-            break;
-          }
-          throw CorruptedLineError(_validClosing!, Chevron());
-        default:
-          throw 'Invalid char'; // unreachable
+      final char = Char.from(c);
+
+      if (['(', '[', '{', '<'].contains(c)) {
+        _stack.push(char);
+        _validClosing = char;
+        continue;
+      }
+
+      if ([')', ']', '}', '>'].contains(c)) {
+        if (_validClosing.runtimeType == char.runtimeType) {
+          _stack.pop();
+          _validClosing = _stack.top();
+          continue;
+        }
+        throw CorruptedLineError(_validClosing!, char);
       }
     }
+
     if (_stack.isNotEmpty) {
       throw IncompleteLineError();
     }
