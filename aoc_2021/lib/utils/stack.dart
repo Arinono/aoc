@@ -30,6 +30,7 @@ class Stack<T> {
       _size--;
       return cpy.value;
     }
+    return null;
   }
 
   int size() => _size;
