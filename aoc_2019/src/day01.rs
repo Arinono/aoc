@@ -1,24 +1,22 @@
-mod day01 {
-    pub fn fuel_requirement(mass: &u32) -> u32 {
-        ((*mass as f32 / 3f32).floor() - 2.0) as u32
+pub fn fuel_requirement(mass: &u32) -> u32 {
+    ((*mass as f32 / 3f32).floor() - 2.0) as u32
+}
+
+pub fn total_fuel_requirement(mass: &u32) -> u32 {
+    let mut fuel = fuel_requirement(mass);
+    let mut additional_fuel = fuel_requirement(&fuel);
+
+    while additional_fuel > 0 {
+        fuel += additional_fuel;
+        additional_fuel = fuel_requirement(&additional_fuel);
     }
 
-    pub fn total_fuel_requirement(mass: &u32) -> u32 {
-        let mut fuel = fuel_requirement(mass);
-        let mut additional_fuel = fuel_requirement(&fuel);
-
-        while additional_fuel > 0 {
-            fuel += additional_fuel;
-            additional_fuel = fuel_requirement(&additional_fuel);
-        }
-
-        fuel + additional_fuel
-    }
+    fuel + additional_fuel
 }
 
 #[cfg(test)]
 mod tests {
-    use super::day01::{fuel_requirement, total_fuel_requirement};
+    use super::{fuel_requirement, total_fuel_requirement};
 
     #[test]
     fn module_fuel_requirement() {
@@ -62,7 +60,7 @@ mod tests {
 
 #[cfg(test)]
 mod solutions {
-    use super::day01::{fuel_requirement, total_fuel_requirement};
+    use super::{fuel_requirement, total_fuel_requirement};
     use std::fs;
 
     fn parsing() -> Vec<u32> {
@@ -79,8 +77,6 @@ mod solutions {
         let result: u32 = parsing()
             .iter()
             .map(fuel_requirement)
-            .collect::<Vec<u32>>()
-            .iter()
             .sum();
 
         assert_eq!(result, 3335787);
@@ -91,8 +87,6 @@ mod solutions {
         let result: u32 = parsing()
             .iter()
             .map(total_fuel_requirement)
-            .collect::<Vec<u32>>()
-            .iter()
             .sum();
 
         assert_eq!(result, 5000812);
