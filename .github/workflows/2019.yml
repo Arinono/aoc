@@ -1,0 +1,15 @@
+name: 2019
+
+on: [push]
+
+jobs:
+  test_and_build:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: aoc_2019
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run tests
+      run: cargo test
