@@ -1,13 +1,5 @@
-#[derive(Debug)]
-pub enum IntcodeError {
-    FormatError
-}
-
-pub fn run_intcode(input: &str) -> Result<Vec<u32>, IntcodeError> {
-    let mut intcodes = input
-        .split(",")
-        .map(|s| s.parse::<u32>().expect("to be an uint"))
-        .collect::<Vec<u32>>();
+pub fn run_intcode(input: Vec<u32>) -> Vec<u32> {
+    let mut intcodes = input.clone();
     let mut idx = 0;
 
     loop {
@@ -16,11 +8,9 @@ pub fn run_intcode(input: &str) -> Result<Vec<u32>, IntcodeError> {
             1 => intcodes[pos] = intcodes[intcodes[idx + 1] as usize] + intcodes[intcodes[idx + 2] as usize],
             2 => intcodes[pos] = intcodes[intcodes[idx + 1] as usize] * intcodes[intcodes[idx + 2] as usize],
             99 => {
-                return Ok(intcodes);
+                return intcodes;
             },
-            _ => {
-                return Err(IntcodeError::FormatError);
-            },
+            _ => unreachable!(),
         };
 
         idx += 4;
@@ -34,7 +24,10 @@ mod tests {
     #[test]
     fn running_intcode() {
         // arrange
-        let input = "1,9,10,3,2,3,11,0,99,30,40,50";
+        let input = "1,9,10,3,2,3,11,0,99,30,40,50"
+            .split(",")
+            .map(|v| v.parse::<u32>().expect("to be u32"))
+            .collect::<Vec<u32>>();
 
         // act
         let result = run_intcode(input);
@@ -42,7 +35,6 @@ mod tests {
         // assert
         assert_eq!(
             result
-                .expect("to be ok")
                 .into_iter()
                 .map(|n| n.to_string())
                 .collect::<Vec<String>>()
@@ -57,23 +49,27 @@ mod solutions {
     use crate::day02::run_intcode;
     use std::fs;
 
-    fn parsing() -> Vec<String> {
+    fn parsing() -> Vec<u32> {
         let input = fs::read_to_string("../inputs/2019/02.txt").expect("Unable to read file");
 
         input
             .lines()
-            .map(|l| l.to_string())
+            .map(str::to_string)
             .collect::<Vec<String>>()
+            .first()
+            .expect("to be present")
+            .split(",")
+            .map(|v| v.parse::<u32>().expect("to be u32"))
+            .collect::<Vec<u32>>()
     }
 
     #[test]
     fn day01_part1() {
-        // this shit's dirty
-        let mut parsed = parsing().first().expect("to be present").split(",").map(|s| s.to_string()).collect::<Vec<String>>();
-        parsed[1] = "12".to_string();
-        parsed[2] = "2".to_string();
-        let result = run_intcode(parsed.join(",").as_str());
+        let mut parsed = parsing();
+        parsed[1] = 12u32;
+        parsed[2] = 2u32;
+        let result = run_intcode(parsed);
 
-        assert_eq!(*result.expect("to be ok").first().expect("to be present"), 3306701);
+        assert_eq!(*result.first().expect("to be present"), 3306701);
     }
 }
