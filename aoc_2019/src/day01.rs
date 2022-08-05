@@ -74,20 +74,14 @@ mod solutions {
 
     #[test]
     fn day01_part1() {
-        let result: u32 = parsing()
-            .iter()
-            .map(fuel_requirement)
-            .sum();
+        let result: u32 = parsing().iter().map(fuel_requirement).sum();
 
         assert_eq!(result, 3335787);
     }
 
     #[test]
     fn day01_part2() {
-        let result: u32 = parsing()
-            .iter()
-            .map(total_fuel_requirement)
-            .sum();
+        let result: u32 = parsing().iter().map(total_fuel_requirement).sum();
 
         assert_eq!(result, 5000812);
     }

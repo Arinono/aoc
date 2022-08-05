@@ -1,15 +1,24 @@
-pub fn run_intcode(input: Vec<u32>) -> Vec<u32> {
+pub fn run_intcode(input: Vec<u32>, noun: u32, verb: u32) -> Vec<u32> {
     let mut intcodes = input.clone();
     let mut idx = 0;
+
+    intcodes[1] = noun;
+    intcodes[2] = verb;
 
     loop {
         let pos = intcodes[idx + 3] as usize;
         match intcodes[idx] {
-            1 => intcodes[pos] = intcodes[intcodes[idx + 1] as usize] + intcodes[intcodes[idx + 2] as usize],
-            2 => intcodes[pos] = intcodes[intcodes[idx + 1] as usize] * intcodes[intcodes[idx + 2] as usize],
+            1 => {
+                intcodes[pos] =
+                    intcodes[intcodes[idx + 1] as usize] + intcodes[intcodes[idx + 2] as usize]
+            }
+            2 => {
+                intcodes[pos] =
+                    intcodes[intcodes[idx + 1] as usize] * intcodes[intcodes[idx + 2] as usize]
+            }
             99 => {
                 return intcodes;
-            },
+            }
             _ => unreachable!(),
         };
 
@@ -30,7 +39,7 @@ mod tests {
             .collect::<Vec<u32>>();
 
         // act
-        let result = run_intcode(input);
+        let result = run_intcode(input, 9u32, 10u32);
 
         // assert
         assert_eq!(
@@ -64,12 +73,25 @@ mod solutions {
     }
 
     #[test]
-    fn day01_part1() {
-        let mut parsed = parsing();
-        parsed[1] = 12u32;
-        parsed[2] = 2u32;
-        let result = run_intcode(parsed);
+    fn day02_part1() {
+        let parsed = parsing();
+        let result = run_intcode(parsed, 12u32, 2u32);
 
         assert_eq!(*result.first().expect("to be present"), 3306701);
+    }
+
+    #[test]
+    fn day02_part2() {
+        let parsed = parsing();
+
+        for noun in (0..=99).collect::<Vec<u32>>() {
+            for verb in (0..=99).collect::<Vec<u32>>() {
+                if run_intcode(parsed.clone(), noun, verb)[0] == 19690720 {
+                    assert_eq!(noun * 100 + verb, 7621);
+                    return;
+                }
+            }
+        }
+        unreachable!()
     }
 }
