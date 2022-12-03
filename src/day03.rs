@@ -45,8 +45,8 @@ pub fn find_badge(rucksacks: Vec<Rucksack>) -> Item {
     let two = rucksacks[1].clone();
     let three = rucksacks[2].clone();
     let mut common: Vec<usize> = vec![];
-    let mut m_two = two.2.clone();
-    let mut m_three = three.2.clone();
+    let mut m_two = two.2;
+    let mut m_three = three.2;
 
     for i0 in one.2.iter() {
         if let Some(pos) = m_two.iter().position(|i2| i0 == i2) {
