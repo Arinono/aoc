@@ -40,6 +40,7 @@ pub fn find_packing_failure(rucksack: Rucksack) -> Item {
         .expect("a match")
 }
 
+// terrible function to look at
 pub fn find_badge(rucksacks: Vec<Rucksack>) -> Item {
     let one = rucksacks[0].clone();
     let two = rucksacks[1].clone();
@@ -48,10 +49,10 @@ pub fn find_badge(rucksacks: Vec<Rucksack>) -> Item {
     let mut m_two = two.2;
     let mut m_three = three.2;
 
-    for i0 in one.2.iter() {
-        if let Some(pos) = m_two.iter().position(|i2| i0 == i2) {
-            if let Some (pos2) = m_three.iter().position(|i3| i0 == i3) {
-                common.push(*i0);
+    for i1 in one.2.iter() {
+        if let Some(pos) = m_two.iter().position(|i2| i1 == i2) {
+            if let Some (pos2) = m_three.iter().position(|i3| i1 == i3) {
+                common.push(*i1);
                 m_two.remove(pos);
                 m_three.remove(pos2);
             }
