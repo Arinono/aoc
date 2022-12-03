@@ -15,7 +15,7 @@ class Day09Runner extends DayRunner<List<List<int>>> {
   Future<String> fetch() async {
     String content = '';
     Stream<String> fileStream =
-        utf8.decoder.bind(File('../inputs/2021/$day.txt').openRead());
+        utf8.decoder.bind(File('./inputs/$day.txt').openRead());
 
     await for (final chk in fileStream) {
       content += chk;

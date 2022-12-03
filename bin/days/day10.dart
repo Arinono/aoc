@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:aoc_2021/day10/day10.dart';
 
@@ -15,7 +14,7 @@ class Day10Runner extends DayRunner<List<String>> {
   Future<String> fetch() async {
     String content = '';
     Stream<String> fileStream =
-        utf8.decoder.bind(File('../inputs/2021/$day.txt').openRead());
+        utf8.decoder.bind(File('./inputs/$day.txt').openRead());
 
     await for (final chk in fileStream) {
       content += chk;

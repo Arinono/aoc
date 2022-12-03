@@ -6,9 +6,6 @@ jobs:
   test_and_build:
     timeout-minutes: 5
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: aoc_2021
     steps:
     - uses: actions/checkout@v1
     - uses: dart-lang/setup-dart@v1
