@@ -11,9 +11,8 @@ pub fn get_inventories(input: &str) -> Vec<Inventory> {
         .split("\n\n")
         .map(|block| {
             block
-                .split('\n')
-                .filter(|l| !l.is_empty())
-                .map(|item| item.parse::<usize>().expect("A valid number"))
+                .lines()
+                .flat_map(str::parse::<usize>)
                 .collect::<Vec<usize>>()
         })
         .into_iter()

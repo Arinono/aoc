@@ -108,7 +108,7 @@ ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw";
 
         let sum: usize = input
-            .split('\n')
+            .lines()
             .map(new_rucksack)
             .map(find_packing_failure)
             .sum();
@@ -123,7 +123,7 @@ jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
 PmmdzqPrVvPwwTWBwg";
 
         let rucksacks: Vec<Rucksack> = input
-            .split('\n')
+            .lines()
             .map(new_rucksack)
             .collect();
 
@@ -143,8 +143,7 @@ mod solutions {
         let input = fs::read_to_string("./inputs/03.txt").expect("a file");
 
         let sum: usize = input
-            .split('\n')
-            .filter(|l| !l.is_empty())
+            .lines()
             .map(new_rucksack)
             .map(find_packing_failure)
             .sum();
@@ -157,8 +156,7 @@ mod solutions {
         let input = fs::read_to_string("./inputs/03.txt").expect("a file");
 
         let rucksacks: Vec<Rucksack> = input
-            .split('\n')
-            .filter(|l| !l.is_empty())
+            .lines()
             .map(new_rucksack)
             .collect();
 

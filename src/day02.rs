@@ -153,8 +153,7 @@ mod solutions {
         let input = fs::read_to_string("./inputs/02.txt").expect("a file");
 
         let total_score: usize = input
-            .split('\n')
-            .filter(|l| !l.is_empty())
+            .lines()
             .map(score_round)
             .sum();
             
@@ -166,8 +165,7 @@ mod solutions {
         let input = fs::read_to_string("./inputs/02.txt").expect("a file");
 
         let total_score: usize = input
-            .split('\n')
-            .filter(|l| !l.is_empty())
+            .lines()
             .map(predict_round)
             .sum();
             
