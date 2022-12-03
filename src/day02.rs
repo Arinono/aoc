@@ -39,7 +39,7 @@ pub fn regular_round(rnd: &str) -> (Sign, Sign) {
        return (left_sign, right_sign);
     }
     
-    panic!("hand malformed");
+    panic!("round malformed");
 }
  
 pub fn predicated_round(rnd: &str) -> (Sign, EndWith) {
@@ -61,7 +61,7 @@ pub fn predicated_round(rnd: &str) -> (Sign, EndWith) {
        return (left_sign, right_sign);
     }
     
-    panic!("hand malformed");
+    panic!("round malformed");
 }
 
 pub fn score_round(rnd: &str) -> usize {
