@@ -267,7 +267,7 @@ mod solutions {
     use super::*;
 
     fn parsing() -> Vec<HashSet<Point>> {
-        let input = fs::read_to_string("../inputs/2019/03.txt").expect("Unable to read file");
+        let input = fs::read_to_string("./inputs/03.txt").expect("Unable to read file");
 
         input
             .lines()

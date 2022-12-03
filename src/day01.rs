@@ -64,7 +64,7 @@ mod solutions {
     use std::fs;
 
     fn parsing() -> Vec<u32> {
-        let input = fs::read_to_string("../inputs/2019/01.txt").expect("Unable to read file");
+        let input = fs::read_to_string("./inputs/01.txt").expect("Unable to read file");
 
         input
             .lines()
