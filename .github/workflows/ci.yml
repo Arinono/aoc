@@ -8,23 +8,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout V
-        uses: actions/checkout@v2
-        with:
-          repository: vlang/v
-      - name: Build V
-        run: make
       - name: Checkout aoc
         uses: actions/checkout@v2
-        with:
-          path: aoc
+      - name: unpack old V
+        run: unzip v_linux.zip
       - name: Lint
-        run: ./v fmt -verify aoc
+        run: ./v/v fmt -verify exo
       - name: Run tests
-        run: ./v test aoc
+        run: ./v/v test exo
       - name: Build
-        run: ./v -prod aoc/aoc.v -o aoc/aoc
-      - name: Move input files
-        run: mv -v aoc/inputs .
+        run: ./v/v -prod aoc.v -o aoc
       - name: Run
-        run: aoc/aoc all
+        run: ./aoc all
