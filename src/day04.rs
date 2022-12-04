@@ -32,9 +32,13 @@ pub fn split_pairs(str: &str) -> Pair {
 }
 
 impl Pair {
-    fn fully_contains(&self) -> bool {
+    fn fully_overlaps(&self) -> bool {
         (self.0.0 <= self.1.0 && self.0.1 >= self.1.1)
             || (self.1.0 <= self.0.0 && self.1.1 >= self.0.1)
+    }
+
+    fn overlaps(&self) -> bool {
+        !(self.0.1 < self.1.0 || self.1.1 < self.0.0)
     }
 }
 
@@ -54,12 +58,12 @@ mod tests {
     }
 
     #[test]
-    fn test_fully_contains() {
+    fn test_fully_overlaps() {
         assert_eq!(
             Pair(
                 SegRange(2, 4),
                 SegRange(6, 8),
-            ).fully_contains(),
+            ).fully_overlaps(),
             false,
         );
 
@@ -67,7 +71,7 @@ mod tests {
             Pair(
                 SegRange(2, 8),
                 SegRange(6, 8),
-            ).fully_contains(),
+            ).fully_overlaps(),
             true,
         );
 
@@ -75,8 +79,27 @@ mod tests {
             Pair(
                 SegRange(5, 7),
                 SegRange(3, 8),
-            ).fully_contains(),
+            ).fully_overlaps(),
             true,
+        );
+    }
+
+    #[test]
+    fn test_contains() {
+        assert_eq!(
+            Pair(
+                SegRange(5, 7),
+                SegRange(7, 9),
+            ).overlaps(),
+            true,
+        );
+
+        assert_eq!(
+            Pair(
+                SegRange(5, 7),
+                SegRange(8, 9),
+            ).overlaps(),
+            false,
         );
     }
 }
@@ -93,10 +116,24 @@ mod solutions {
         let sum = input
             .lines()
             .map(split_pairs)
-            .map(|p| p.fully_contains())
+            .map(|p| p.fully_overlaps())
             .filter(|b| *b)
             .count();
 
         assert_eq!(sum, 485);
+    }
+
+    #[test]
+    fn part2() {
+        let input = fs::read_to_string("./inputs/04.txt").expect("a file");
+
+        let sum = input
+            .lines()
+            .map(split_pairs)
+            .map(|p| p.overlaps())
+            .filter(|b| *b)
+            .count();
+
+        assert_eq!(sum, 857);
     }
 }
