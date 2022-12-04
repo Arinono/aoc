@@ -83,7 +83,7 @@ mod tests {
     }
 
     #[test]
-    fn test_contains() {
+    fn test_overlaps() {
         assert_eq!(
             Pair(
                 SegRange(5, 7),
