@@ -6,27 +6,25 @@ pub struct SegRange(usize, usize);
 #[derive(Eq, PartialEq, Debug)]
 pub struct Pair(SegRange, SegRange);
 
+fn c_split(p: char) -> impl for <'a> Fn(&'a str) -> core::str::Split<'a, char> {
+    move |a| a.split(p)
+}
+
 pub fn split_pairs(str: &str) -> Pair {
-    let raw_pair = str
-        .split_once(',')
-        .expect("two pairs");
-
-    let left_pair = raw_pair.0
-        .split_once('-')
-        .expect("two numbers");
-
-    let right_pair = raw_pair.1
-        .split_once('-')
-        .expect("two numbers");
+    let raw_pairs = str
+        .split(',')
+        .flat_map(c_split('-'))
+        .flat_map(str::parse::<usize>)
+        .collect::<Vec<usize>>();
 
     Pair(
         SegRange(
-            left_pair.0.parse::<usize>().expect("a number"),
-            left_pair.1.parse::<usize>().expect("a number"),
+            raw_pairs[0],
+            raw_pairs[1],
         ),
         SegRange(
-            right_pair.0.parse::<usize>().expect("a number"),
-            right_pair.1.parse::<usize>().expect("a number"),
+            raw_pairs[2],
+            raw_pairs[3],
         ),
     )
 }
@@ -112,12 +110,14 @@ mod solutions {
     #[test]
     fn part1() {
         let input = fs::read_to_string("./inputs/04.txt").expect("a file");
+        let is_true = |v: &bool| *v;
+        let fully_overlaps = |p: Pair| p.fully_overlaps();
 
         let sum = input
             .lines()
             .map(split_pairs)
-            .map(|p| p.fully_overlaps())
-            .filter(|b| *b)
+            .map(fully_overlaps)
+            .filter(is_true)
             .count();
 
         assert_eq!(sum, 485);
@@ -126,12 +126,14 @@ mod solutions {
     #[test]
     fn part2() {
         let input = fs::read_to_string("./inputs/04.txt").expect("a file");
+        let is_true = |v: &bool| *v;
+        let overlaps = |p: Pair| p.overlaps();
 
         let sum = input
             .lines()
             .map(split_pairs)
-            .map(|p| p.overlaps())
-            .filter(|b| *b)
+            .map(overlaps)
+            .filter(is_true)
             .count();
 
         assert_eq!(sum, 857);
