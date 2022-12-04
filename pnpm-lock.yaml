@@ -1,0 +1,15 @@
+lockfileVersion: 5.3
+
+specifiers:
+  husky: ^5.2.0
+
+devDependencies:
+  husky: 5.2.0
+
+packages:
+
+  /husky/5.2.0:
+    resolution: {integrity: sha512-AM8T/auHXRBxlrfPVLKP6jt49GCM2Zz47m8G3FOMsLmTv8Dj/fKVWE0Rh2d4Qrvmy131xEsdQnb3OXRib67PGg==}
+    engines: {node: '>= 10'}
+    hasBin: true
+    dev: true

@@ -1,0 +1,30 @@
+name: CI
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout V
+        uses: actions/checkout@v2
+        with:
+          repository: vlang/v
+      - name: Build V
+        run: make
+      - name: Checkout aoc
+        uses: actions/checkout@v2
+        with:
+          path: aoc
+      - name: Lint
+        run: ./v fmt -verify aoc
+      - name: Run tests
+        run: ./v test aoc
+      - name: Build
+        run: ./v -prod aoc/aoc.v -o aoc/aoc
+      - name: Move input files
+        run: mv -v aoc/inputs .
+      - name: Run
+        run: aoc/aoc all

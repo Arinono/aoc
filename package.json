@@ -1,0 +1,19 @@
+{
+  "name": "aoc-2020",
+  "version": "1.0.0",
+  "scripts": {
+    "postinstall": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arinono/aoc.git"
+  },
+  "author": "Aurelien Arino <aurelien.arino@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/Arinono/aoc/issues"
+  },
+  "homepage": "https://github.com/Arinono/aoc#readme",
+  "devDependencies": {
+    "husky": "^5.2.0"
+  }
+}
