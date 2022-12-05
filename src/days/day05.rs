@@ -27,6 +27,24 @@ impl Stacks {
         Stacks(m_stacks_cpy)
     }
 
+    fn perform_moves_in_order(&self, moves: Vec<Move>) -> Stacks {
+        let mut m_stacks_cpy = self.0.clone();
+
+        for m in moves.iter() {
+            let mut crates: Vec<char>= vec![];
+            for _ in 0..m.ct {
+                if let Some(crat) = m_stacks_cpy[m.fr - 1].pop() {
+                    crates.push(crat);
+                }
+            }
+            for c in crates.into_iter().rev() {
+                m_stacks_cpy[m.to - 1].push(c);
+            }
+        }
+
+        Stacks(m_stacks_cpy)
+    }
+
     fn get_top_crates(&self) -> String {
         let mut str: String = String::new();
 
@@ -218,6 +236,31 @@ move 1 from 1 to 2";
     }
 
     #[test]
+    fn test_perform_moves_in_order() {
+        let input = r"    [D]    
+[N] [C]    
+[Z] [M] [P]
+ 1   2   3 
+
+move 1 from 2 to 1
+move 3 from 1 to 3
+move 2 from 2 to 1
+move 1 from 1 to 2";
+        let (stacks, moves) = parse_all(input);
+
+        let stacks = stacks.perform_moves_in_order(moves);
+
+        assert_eq!(
+            stacks,
+            Stacks(vec![
+                   vec!['M'],
+                   vec!['C'],
+                   vec!['P', 'Z', 'N', 'D'],
+            ]),
+        );
+    }
+
+    #[test]
     fn test_get_top_crates() {
         let input = r"    [D]    
 [N] [C]    
@@ -252,5 +295,17 @@ mod solutions {
         let crates = stacks.get_top_crates();
 
         assert_eq!(crates, "LBLVVTVLP");
+    }
+
+    #[test]
+    fn part2() {
+        let input = fs::read_to_string("./inputs/05.txt").expect("a file");
+
+        let (pstacks, moves) = parse_all(input.as_ref());
+
+        let stacks = pstacks.perform_moves_in_order(moves);
+        let crates = stacks.get_top_crates();
+
+        assert_eq!(crates, "TPFFBDRJD");
     }
 }
