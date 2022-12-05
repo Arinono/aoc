@@ -31,7 +31,7 @@ impl Stacks {
         let mut m_stacks_cpy = self.0.clone();
 
         for m in moves.iter() {
-            let mut crates: Vec<char>= vec![];
+            let mut crates: Vec<char> = vec![];
             for _ in 0..m.ct {
                 if let Some(crat) = m_stacks_cpy[m.fr - 1].pop() {
                     crates.push(crat);
@@ -227,11 +227,7 @@ move 1 from 1 to 2";
 
         assert_eq!(
             stacks,
-            Stacks(vec![
-                   vec!['C'],
-                   vec!['M'],
-                   vec!['P', 'D', 'N', 'Z'],
-            ]),
+            Stacks(vec![vec!['C'], vec!['M'], vec!['P', 'D', 'N', 'Z'],]),
         );
     }
 
@@ -252,11 +248,7 @@ move 1 from 1 to 2";
 
         assert_eq!(
             stacks,
-            Stacks(vec![
-                   vec!['M'],
-                   vec!['C'],
-                   vec!['P', 'Z', 'N', 'D'],
-            ]),
+            Stacks(vec![vec!['M'], vec!['C'], vec!['P', 'Z', 'N', 'D'],]),
         );
     }
 
