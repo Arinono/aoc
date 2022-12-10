@@ -4,12 +4,12 @@ use std::{collections::HashSet, iter::FromIterator};
 
 use array_tool::vec::Shift;
 
-pub fn find_marker_idx(str: &str) -> usize {
-    let mut marker_idx: usize = 4;
-    let mut m_previous_four = Vec::with_capacity(4);
+pub fn find_marker_idx(str: &str, marker_size: usize) -> usize {
+    let mut marker_idx: usize = marker_size;
+    let mut m_previous_four = Vec::with_capacity(marker_size);
 
     for (idx, ch) in str.chars().enumerate() {
-        if m_previous_four.len() < 4 {
+        if m_previous_four.len() < marker_size {
             m_previous_four.push(ch);
             continue;
         }
@@ -18,7 +18,7 @@ pub fn find_marker_idx(str: &str) -> usize {
         m_previous_four.push(ch);
         let uniq: HashSet<char> = HashSet::from_iter(m_previous_four.iter().cloned());
 
-        if uniq.len() < 4 {
+        if uniq.len() < marker_size {
             continue;
         }
 
@@ -34,7 +34,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_find_marker_idx() {
+    fn test_find_marker_idx_from_4() {
         let inputs: Vec<(&str, usize)> = vec![
             ("mjqjpqmgbljsphdztnvjfqwrcgsmlb", 7),
             ("bvwbjplbgvbhsrlpgdmjqwftvncz", 5),
@@ -44,7 +44,24 @@ mod tests {
         ];
 
         for (input, expected) in inputs.iter() {
-            let marker_idx = find_marker_idx(input);
+            let marker_idx = find_marker_idx(input, 4);
+
+            assert_eq!(marker_idx, *expected);
+        }
+    }
+
+    #[test]
+    fn test_find_marker_idx_from_14() {
+        let inputs: Vec<(&str, usize)> = vec![
+            ("mjqjpqmgbljsphdztnvjfqwrcgsmlb", 19),
+            ("bvwbjplbgvbhsrlpgdmjqwftvncz", 23),
+            ("nppdvjthqldpwncqszvftbrmjlhg", 23),
+            ("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg", 29),
+            ("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw", 26),
+        ];
+
+        for (input, expected) in inputs.iter() {
+            let marker_idx = find_marker_idx(input, 14);
 
             assert_eq!(marker_idx, *expected);
         }
@@ -64,8 +81,17 @@ mod solutions {
     fn part1() {
         let input = read_file();
 
-        let marker_idx = find_marker_idx(&input);
+        let marker_idx = find_marker_idx(&input, 4);
 
         assert_eq!(marker_idx, 1531);
+    }
+
+    #[test]
+    fn part2() {
+        let input = read_file();
+
+        let marker_idx = find_marker_idx(&input, 14);
+
+        assert_eq!(marker_idx, 2518);
     }
 }
