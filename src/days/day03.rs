@@ -8,8 +8,9 @@ type Rucksack = (Vec<Item>, Vec<Item>, Vec<Item>);
 
 pub fn new_item(char: char) -> Item {
     let nums = vec![
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+        's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+        'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
     ];
 
     let fd = nums
@@ -23,10 +24,7 @@ pub fn new_item(char: char) -> Item {
 pub fn new_rucksack(str: &str) -> Rucksack {
     let string = str.to_owned();
 
-    let whole: Vec<Item> = string
-        .chars()
-        .map(new_item)
-        .collect();
+    let whole: Vec<Item> = string.chars().map(new_item).collect();
 
     let (left, right) = whole.split_at(str.len() / 2);
 
@@ -34,10 +32,7 @@ pub fn new_rucksack(str: &str) -> Rucksack {
 }
 
 pub fn find_packing_failure(rucksack: Rucksack) -> Item {
-    *rucksack.0
-        .intersect(rucksack.1)
-        .first()
-        .expect("a match")
+    *rucksack.0.intersect(rucksack.1).first().expect("a match")
 }
 
 // terrible function to look at
@@ -51,7 +46,7 @@ pub fn find_badge(rucksacks: Vec<Rucksack>) -> Item {
 
     for i1 in one.2.iter() {
         if let Some(pos) = m_two.iter().position(|i2| i1 == i2) {
-            if let Some (pos2) = m_three.iter().position(|i3| i1 == i3) {
+            if let Some(pos2) = m_three.iter().position(|i3| i1 == i3) {
                 common.push(*i1);
                 m_two.remove(pos);
                 m_three.remove(pos2);
@@ -79,14 +74,14 @@ mod tests {
         println!("{:?}", new_rucksack("vJrwpWtwJgWrhcsFMMfFFhFp"));
         assert_eq!(
             new_rucksack("vJrwpWtwJgWrhcsFMMfFFhFp"),
-            (vec![
-                22, 36, 18, 23, 16, 49, 20, 23, 36, 7, 49, 18,
-            ], vec![
-                8, 3, 19, 32, 39, 39, 6, 32, 32, 8, 32, 16,
-            ], vec![
-                22, 36, 18, 23, 16, 49, 20, 23, 36, 7, 49, 18,
-                8, 3, 19, 32, 39, 39, 6, 32, 32, 8, 32, 16,
-            ]),
+            (
+                vec![22, 36, 18, 23, 16, 49, 20, 23, 36, 7, 49, 18,],
+                vec![8, 3, 19, 32, 39, 39, 6, 32, 32, 8, 32, 16,],
+                vec![
+                    22, 36, 18, 23, 16, 49, 20, 23, 36, 7, 49, 18, 8, 3, 19, 32, 39, 39, 6, 32, 32,
+                    8, 32, 16,
+                ]
+            ),
         );
     }
 
@@ -123,10 +118,7 @@ CrZsJsPPZsGzwwsLwLmpwMDw";
 jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
 PmmdzqPrVvPwwTWBwg";
 
-        let rucksacks: Vec<Rucksack> = input
-            .lines()
-            .map(new_rucksack)
-            .collect();
+        let rucksacks: Vec<Rucksack> = input.lines().map(new_rucksack).collect();
 
         let badge = find_badge(rucksacks);
 
@@ -136,8 +128,8 @@ PmmdzqPrVvPwwTWBwg";
 
 #[cfg(test)]
 mod solutions {
-    use std::fs;
     use super::*;
+    use std::fs;
 
     #[test]
     fn part1() {
@@ -156,10 +148,7 @@ mod solutions {
     fn part2() {
         let input = fs::read_to_string("./inputs/03.txt").expect("a file");
 
-        let rucksacks: Vec<Rucksack> = input
-            .lines()
-            .map(new_rucksack)
-            .collect();
+        let rucksacks: Vec<Rucksack> = input.lines().map(new_rucksack).collect();
 
         // starting from here, it diverges from the idea I had.
         // I need more time to find how to do it properly:

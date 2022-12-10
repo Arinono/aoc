@@ -22,58 +22,58 @@ pub enum EndWith {
 
 pub fn regular_round(rnd: &str) -> (Sign, Sign) {
     if let Some((l, r)) = rnd.split_once(' ') {
-       let left_sign = match l {
-           "A" => Sign::Rock(ROCK),
-           "B" => Sign::Paper(PAPER),
-           "C" => Sign::Scissors(SCISSORS),
-           _ => panic!("invalid left hand"),
-       };
+        let left_sign = match l {
+            "A" => Sign::Rock(ROCK),
+            "B" => Sign::Paper(PAPER),
+            "C" => Sign::Scissors(SCISSORS),
+            _ => panic!("invalid left hand"),
+        };
 
-       let right_sign = match r {
-           "X" => Sign::Rock(ROCK),
-           "Y" => Sign::Paper(PAPER),
-           "Z" => Sign::Scissors(SCISSORS),
-           _ => panic!("invalid right hand"),
-       };
+        let right_sign = match r {
+            "X" => Sign::Rock(ROCK),
+            "Y" => Sign::Paper(PAPER),
+            "Z" => Sign::Scissors(SCISSORS),
+            _ => panic!("invalid right hand"),
+        };
 
-       return (left_sign, right_sign);
+        return (left_sign, right_sign);
     }
-    
+
     panic!("round malformed");
 }
- 
+
 pub fn predicated_round(rnd: &str) -> (Sign, EndWith) {
     if let Some((l, r)) = rnd.split_once(' ') {
-       let left_sign = match l {
-           "A" => Sign::Rock(ROCK),
-           "B" => Sign::Paper(PAPER),
-           "C" => Sign::Scissors(SCISSORS),
-           _ => panic!("invalid left hand"),
-       };
+        let left_sign = match l {
+            "A" => Sign::Rock(ROCK),
+            "B" => Sign::Paper(PAPER),
+            "C" => Sign::Scissors(SCISSORS),
+            _ => panic!("invalid left hand"),
+        };
 
-       let right_sign = match r {
-           "X" => EndWith::Lose(LOSE),
-           "Y" => EndWith::Draw(DRAW),
-           "Z" => EndWith::Win(WIN),
-           _ => panic!("invalid right hand"),
-       };
+        let right_sign = match r {
+            "X" => EndWith::Lose(LOSE),
+            "Y" => EndWith::Draw(DRAW),
+            "Z" => EndWith::Win(WIN),
+            _ => panic!("invalid right hand"),
+        };
 
-       return (left_sign, right_sign);
+        return (left_sign, right_sign);
     }
-    
+
     panic!("round malformed");
 }
 
 pub fn score_round(rnd: &str) -> usize {
     let (l, r) = regular_round(rnd);
-    
+
     match l {
         Sign::Rock(_) => match r {
             Sign::Rock(sc) => sc + DRAW,
             Sign::Paper(sc) => sc + WIN,
             Sign::Scissors(sc) => sc + LOSE,
         },
-        Sign::Paper(_) =>  match r {
+        Sign::Paper(_) => match r {
             Sign::Rock(sc) => sc + LOSE,
             Sign::Paper(sc) => sc + DRAW,
             Sign::Scissors(sc) => sc + WIN,
@@ -88,14 +88,14 @@ pub fn score_round(rnd: &str) -> usize {
 
 pub fn predict_round(rnd: &str) -> usize {
     let (l, r) = predicated_round(rnd);
-    
+
     match l {
         Sign::Rock(_) => match r {
             EndWith::Win(sc) => sc + PAPER,
             EndWith::Draw(sc) => sc + ROCK,
             EndWith::Lose(sc) => sc + SCISSORS,
         },
-        Sign::Paper(_) =>  match r {
+        Sign::Paper(_) => match r {
             EndWith::Win(sc) => sc + SCISSORS,
             EndWith::Draw(sc) => sc + PAPER,
             EndWith::Lose(sc) => sc + ROCK,
@@ -145,18 +145,15 @@ mod tests {
 
 #[cfg(test)]
 mod solutions {
-    use std::fs;
     use super::*;
+    use std::fs;
 
     #[test]
     fn part1() {
         let input = fs::read_to_string("./inputs/02.txt").expect("a file");
 
-        let total_score: usize = input
-            .lines()
-            .map(score_round)
-            .sum();
-            
+        let total_score: usize = input.lines().map(score_round).sum();
+
         assert_eq!(total_score, 11873);
     }
 
@@ -164,11 +161,8 @@ mod solutions {
     fn part2() {
         let input = fs::read_to_string("./inputs/02.txt").expect("a file");
 
-        let total_score: usize = input
-            .lines()
-            .map(predict_round)
-            .sum();
-            
+        let total_score: usize = input.lines().map(predict_round).sum();
+
         assert_eq!(total_score, 12014);
     }
 }

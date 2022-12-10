@@ -28,7 +28,7 @@ pub fn get_biggest_invs(invs: Vec<Inventory>, len: usize) -> Vec<Inventory> {
     sorted_invs.sort_by_key(|i| i.sum);
     sorted_invs.reverse();
 
-    let (biggest, _ ) = sorted_invs.split_at(len);
+    let (biggest, _) = sorted_invs.split_at(len);
 
     biggest.to_vec()
 }
@@ -114,10 +114,7 @@ mod solutions {
         let invs = get_inventories(&input);
         let biggest_invs = get_biggest_invs(invs, 3);
 
-        let sums: Vec<usize> = biggest_invs
-            .iter()
-            .map(|i| i.sum)
-            .collect();
+        let sums: Vec<usize> = biggest_invs.iter().map(|i| i.sum).collect();
 
         assert_eq!(sums.into_iter().sum::<usize>(), 204639);
     }

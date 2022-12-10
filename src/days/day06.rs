@@ -70,8 +70,8 @@ mod tests {
 
 #[cfg(test)]
 mod solutions {
-    use std::fs;
     use super::*;
+    use std::fs;
 
     fn read_file() -> String {
         fs::read_to_string("./inputs/06.txt").expect("a file")
