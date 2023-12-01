@@ -1,11 +1,15 @@
-pub fn solve(input: &String) -> String {
-    let res: usize = input
-        .lines()
-        .into_iter()
-        .map(|l| get_calibration_value(l))
-        .sum();
+use rayon::iter::{ParallelBridge, ParallelIterator};
 
-    res.to_string()
+pub fn solve(input: &String) -> String {
+    let sum = input
+        .lines()
+        .par_bridge()
+        .map(|line| get_calibration_value(line))
+        .collect::<Vec<usize>>()
+        .iter()
+        .sum::<usize>();
+
+    sum.to_string()
 }
 
 fn get_calibration_value(line: &str) -> usize {
@@ -26,7 +30,9 @@ fn get_calibration_value(line: &str) -> usize {
         }
     }
 
-   format!("{}{}", fst.unwrap(), snd.unwrap()).parse::<usize>().unwrap()
+    format!("{}{}", fst.unwrap(), snd.unwrap())
+        .parse::<usize>()
+        .unwrap()
 }
 
 #[cfg(test)]

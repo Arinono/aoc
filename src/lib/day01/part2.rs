@@ -1,15 +1,17 @@
+use rayon::iter::{ParallelBridge, ParallelIterator};
+
 const STR_DIGITS: [&str; 9] = [
     "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
 ];
 
 pub fn solve(input: &String) -> String {
-    let res = input
+    let sum = input
         .lines()
-        .into_iter()
-        .map(|l| get_calibration_value(l))
-        .collect::<Vec<usize>>();
-
-    let sum = res.iter().sum::<usize>();
+        .par_bridge()
+        .map(|line| get_calibration_value(line))
+        .collect::<Vec<usize>>()
+        .iter()
+        .sum::<usize>();
 
     sum.to_string()
 }
@@ -75,8 +77,9 @@ abcone2threexyz
 xtwone3four
 4nineeightseven2
 zoneight234
-7pqrstsixteen".to_owned();
-        
+7pqrstsixteen"
+            .to_owned();
+
         assert_eq!(solve(&input), "281");
     }
 }
