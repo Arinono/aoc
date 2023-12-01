@@ -1,9 +1,9 @@
 extern crate aoc;
-    
+
 use anyhow::Result;
 use aoc::*;
 use clap::Parser;
-use std::{fs, fmt::{Display, Formatter, self}};
+use std::fs;
 
 #[derive(Parser)]
 #[command(author, version)]
@@ -23,16 +23,15 @@ fn main() -> Result<()> {
     let input = fs::read_to_string(format!("./inputs/day{}.txt", &padded_day))?;
 
     match day {
-        1 => {
-            match cli.part {
-                Some (1) => println!("{}", day01::part1::solve(&input)),
-                Some (2) => todo!(),
-                None => {
-                    println!("{}", day01::part1::solve(&input));
-                },
-                Some (_) => {
-                    return Err(anyhow::anyhow!("Invalid part number"));
-                },
+        1 => match cli.part {
+            Some(1) => println!("{}", day01::part1::solve(&input)),
+            Some(2) => println!("{}", day01::part2::solve(&input)),
+            None => {
+                println!("{}", day01::part1::solve(&input));
+                println!("{}", day01::part2::solve(&input));
+            }
+            Some(_) => {
+                return Err(anyhow::anyhow!("Invalid part number"));
             }
         },
         _ => todo!(),

@@ -1,11 +1,11 @@
 pub fn solve(input: &String) -> String {
-    let t: usize = input
+    let res: usize = input
         .lines()
         .into_iter()
         .map(|l| get_calibration_value(l))
         .sum();
 
-    t.to_string()
+    res.to_string()
 }
 
 fn get_calibration_value(line: &str) -> usize {
