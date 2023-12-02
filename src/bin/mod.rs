@@ -36,10 +36,10 @@ fn main() -> Result<()> {
         },
         2 => match cli.part {
             Some(1) => println!("{}", day02::part1::solve(&input)),
-            Some(2) => todo!(),//println!("{}", day02::part2::solve(&input)),
+            Some(2) => println!("{}", day02::part2::solve(&input)),
             None => {
                 println!("{}", day02::part1::solve(&input));
-                // println!("{}", day01::part2::solve(&input));
+                println!("{}", day02::part2::solve(&input));
             }
             Some(_) => {
                 return Err(anyhow::anyhow!("Invalid part number"));

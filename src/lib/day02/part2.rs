@@ -2,26 +2,12 @@ use rayon::iter::{IntoParallelRefIterator, ParallelBridge, ParallelIterator};
 
 pub fn solve(input: &String) -> String {
     let games = parse_games(input);
-    find_possible(&games).par_iter().sum::<u32>().to_string()
-}
-
-fn find_possible(games: &Vec<Game>) -> Vec<u32> {
-    let stack = CubeStack {
-        red: 12,
-        green: 13,
-        blue: 14,
-    };
-
     games
         .par_iter()
-        .filter(|game| {
-            !game
-                .stacks
-                .iter()
-                .any(|s| s.red > stack.red || s.green > stack.green || s.blue > stack.blue)
-        })
-        .map(|game| game.id)
-        .collect::<Vec<u32>>()
+        .map(find_minimum)
+        .map(calc_power)
+        .sum::<u32>()
+        .to_string()
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -112,6 +98,34 @@ fn parse_games(input: &str) -> Vec<Game> {
     games.sort_by(|a, b| a.id.cmp(&b.id));
 
     games
+}
+
+fn find_minimum(game: &Game) -> CubeStack {
+    let mut minimum = CubeStack {
+        red: 0,
+        green: 0,
+        blue: 0,
+    };
+
+    for stack in &game.stacks {
+        if stack.red >= minimum.red {
+            minimum.red = stack.red;
+        }
+
+        if stack.green >= minimum.green {
+            minimum.green = stack.green;
+        }
+
+        if stack.blue >= minimum.blue {
+            minimum.blue = stack.blue;
+        }
+    }
+
+    minimum
+}
+
+fn calc_power(stack: CubeStack) -> u32 {
+    stack.red * stack.green * stack.blue
 }
 
 #[cfg(test)]
@@ -263,14 +277,51 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green";
     }
 
     #[test]
-    fn test_find_possible() {
+    fn test_find_minimum() {
         let (_, game) = seed();
-        assert_eq!(find_possible(&game), vec![1, 2, 5]);
+        assert_eq!(
+            find_minimum(&game[0]),
+            CubeStack {
+                red: 4,
+                green: 2,
+                blue: 6,
+            }
+        );
+
+        assert_eq!(
+            find_minimum(&parse_line("Game 43: 15 red, 5 blue, 5 green; 15 green, 15 red, 1 blue; 4 blue, 13 green, 13 red; 3 red, 16 green; 2 red, 3 green, 2 blue")),
+            CubeStack {
+                red: 15,
+                green: 16,
+                blue: 5,
+            }
+        );
+
+        assert_eq!(
+            find_minimum(&parse_line("Game 5: 3 blue, 3 red, 8 green; 5 blue, 1 red; 1 green, 19 blue, 3 red; 1 red, 5 green, 3 blue; 4 green, 20 blue, 4 red; 20 blue, 4 green")),
+            CubeStack {
+                red: 4,
+                green: 8,
+                blue: 20,
+            }
+        );
+    }
+
+    #[test]
+    fn test_calc_power() {
+        assert_eq!(
+            calc_power(CubeStack {
+                red: 4,
+                green: 2,
+                blue: 6,
+            }),
+            48
+        );
     }
 
     #[test]
     fn test_solve() {
         let (input, _) = seed();
-        assert_eq!(solve(&input.to_string()), "8");
+        assert_eq!(solve(&input.to_string()), "2286");
     }
 }
