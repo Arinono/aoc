@@ -83,6 +83,16 @@ impl Run for Day {
                     aoc::day02::part2::solve(&input),
                 ),
             },
+            3 => match part.0 {
+                1 => aoc::day03::part1::solve(&input),
+                // 2 => aoc::day03::part2::solve(&input),
+                _ => format!(
+                    "{}\n\t{}",
+                    aoc::day03::part1::solve(&input),
+                    "0".to_string()
+                    // aoc::day03::part2::solve(&input),
+                ),
+            },
             _ => todo!(),
         })
     }
